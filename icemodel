@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>氷山モデル — 見えない構造まで降りていく思考法</title>
+<style>
+  :root {
+    --bg: #f7f8fb;
+    --ink: #1f2430;
+    --sub: #5b6476;
+    --line: #e3e6ef;
+    --card: #ffffff;
+    --shadow: 0 6px 24px rgba(31, 36, 48, 0.06);
+    --accent: #f59e0b;
+
+    /* 4 layers */
+    --L1: #60a5fa;  /* events - light sky */
+    --L1-bg: #eaf3ff;
+    --L2: #3b82f6;  /* patterns */
+    --L2-bg: #dce8ff;
+    --L3: #1d4ed8;  /* structure - deep blue */
+    --L3-bg: #ccd9f7;
+    --L4: #1e1b4b;  /* mental models - near-black indigo */
+    --L4-bg: #c7c4e6;
+
+    --water: #bfdcff;
+    --waterline: #1f6feb;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  header.hero {
+    text-align: center;
+    padding: 32px 16px 8px;
+  }
+  header.hero .kicker {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--sub);
+    border: 1px solid var(--line);
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: #fff;
+  }
+  header.hero h1 {
+    font-size: 34px;
+    line-height: 1.35;
+    margin: 16px 0 8px;
+    letter-spacing: 0.01em;
+  }
+  header.hero p.lead {
+    color: var(--sub);
+    max-width: 720px;
+    margin: 8px auto 0;
+    font-size: 15px;
+  }
+
+  h2.section-title {
+    font-size: 20px;
+    margin: 56px 0 18px;
+    padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+
+  /* intro */
+  .intro {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 22px 26px;
+    font-size: 15px;
+  }
+  .intro b { color: var(--L3); }
+
+  /* Iceberg diagram */
+  .diagram-wrap {
+    background: linear-gradient(180deg, #eaf4ff 0%, #eaf4ff 38%, #bfdcff 38%, #5b92d1 100%);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 10px 10px 14px;
+    overflow-x: auto;
+  }
+  .diagram-wrap svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    font-size: 13px;
+    color: var(--sub);
+    padding: 8px 16px 4px;
+  }
+
+  /* Four layer cards */
+  .layers { display: grid; gap: 14px; grid-template-columns: 1fr; }
+  .layer {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 22px 24px;
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 20px;
+    align-items: start;
+    border-left: 6px solid var(--line);
+  }
+  .layer .num {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    padding-top: 4px;
+  }
+  .layer .num small {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    color: var(--sub);
+    margin-top: 8px;
+  }
+  .layer h3 { margin: 0 0 4px; font-size: 18px; }
+  .layer h3 .jp { font-size: 13px; color: var(--sub); margin-left: 8px; font-weight: 500; }
+  .layer .q {
+    background: #fafbfe;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--sub);
+    margin: 10px 0 12px;
+    border-left: 3px solid var(--line);
+  }
+  .layer ul { margin: 0; padding-left: 20px; }
+  .layer ul li { margin-bottom: 4px; font-size: 14.5px; }
+  .layer .leverage {
+    display: inline-block;
+    font-size: 11.5px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-top: 10px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .layer.l1 { border-left-color: var(--L1); }
+  .layer.l1 .num { color: var(--L1); }
+  .layer.l1 .q { border-left-color: var(--L1); }
+  .layer.l1 .leverage { background: var(--L1-bg); color: var(--L1); }
+
+  .layer.l2 { border-left-color: var(--L2); }
+  .layer.l2 .num { color: var(--L2); }
+  .layer.l2 .q { border-left-color: var(--L2); }
+  .layer.l2 .leverage { background: var(--L2-bg); color: var(--L2); }
+
+  .layer.l3 { border-left-color: var(--L3); }
+  .layer.l3 .num { color: var(--L3); }
+  .layer.l3 .q { border-left-color: var(--L3); }
+  .layer.l3 .leverage { background: var(--L3-bg); color: var(--L3); }
+
+  .layer.l4 { border-left-color: var(--L4); }
+  .layer.l4 .num { color: var(--L4); }
+  .layer.l4 .q { border-left-color: var(--L4); }
+  .layer.l4 .leverage { background: var(--L4-bg); color: var(--L4); }
+
+  /* Example stories */
+  .example {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 22px 26px;
+    margin-bottom: 18px;
+  }
+  .example .scene {
+    font-size: 13px;
+    color: var(--sub);
+    letter-spacing: 0.06em;
+  }
+  .example h3 {
+    margin: 4px 0 10px;
+    font-size: 17px;
+  }
+  .example .surface {
+    background: #fff7e6;
+    border-left: 3px solid var(--accent);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 14.5px;
+    margin-bottom: 16px;
+    color: #5c4512;
+  }
+  .example .steps { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .example .step {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 14px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    align-items: start;
+    font-size: 14px;
+  }
+  .example .step .tag {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border-radius: 6px;
+    align-self: start;
+    text-align: center;
+  }
+  .example .step.l1 { background: var(--L1-bg); }
+  .example .step.l1 .tag { background: var(--L1); color: #fff; }
+  .example .step.l2 { background: var(--L2-bg); }
+  .example .step.l2 .tag { background: var(--L2); color: #fff; }
+  .example .step.l3 { background: var(--L3-bg); }
+  .example .step.l3 .tag { background: var(--L3); color: #fff; }
+  .example .step.l4 { background: var(--L4-bg); }
+  .example .step.l4 .tag { background: var(--L4); color: #fff; }
+
+  /* compare with prior article */
+  .connect {
+    background: linear-gradient(135deg, #eff5ff 0%, #ecf8f3 100%);
+    border-radius: 16px;
+    padding: 26px 28px;
+    box-shadow: var(--shadow);
+    font-size: 15px;
+  }
+  .connect b { color: var(--L3); }
+
+  /* tips list */
+  .tips {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 22px 26px;
+  }
+  .tips ol { padding-left: 22px; margin: 6px 0 0; }
+  .tips ol li { margin-bottom: 6px; font-size: 15px; }
+  .tips ol li b { color: var(--L3); }
+
+  footer.note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--sub);
+    margin-top: 40px;
+  }
+
+  @media (max-width: 720px) {
+    header.hero h1 { font-size: 26px; }
+    .layer { grid-template-columns: 1fr; }
+    .layer .num { font-size: 28px; }
+    .example .step { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <span class="kicker">SYSTEMS THINKING · TOOL</span>
+  <h1>氷山モデル</h1>
+  <p class="lead">目に見える「出来事」は、氷山の一角。<br />水面下の<b>パターン → 構造 → メンタルモデル</b>まで降りていくほど、<br />変化を生む“てこ”は大きくなります。</p>
+</header>
+
+<!-- INTRO -->
+<h2 class="section-title">氷山モデルとは</h2>
+<div class="intro">
+  氷山モデル(Iceberg Model)はシステムシンキングの代表的なツールで、
+  1つの「出来事」だけを見て反応するのではなく、その下にある
+  <b>繰り返しのパターン</b>・<b>それを生む構造</b>・<b>人々の思い込み(メンタルモデル)</b>
+  まで掘り下げて原因を捉えるためのフレームです。
+  下に降りるほど見えにくくなりますが、同時に<b>レバレッジ(介入の効き)</b>は大きくなります。
+</div>
+
+<!-- DIAGRAM -->
+<h2 class="section-title">図で見る:4つの階層</h2>
+<div class="diagram-wrap">
+<svg viewBox="0 0 960 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Iceberg model showing four layers from events to mental models.">
+  <defs>
+    <linearGradient id="ice-top" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eaf4ff"/>
+    </linearGradient>
+    <linearGradient id="ice-bottom" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cfe2f9"/>
+      <stop offset="0.5" stop-color="#6fa8d6"/>
+      <stop offset="1" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4faff"/>
+      <stop offset="1" stop-color="#dbecff"/>
+    </linearGradient>
+    <marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="9" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L5,10 L10,0 Z" fill="#1f2430"/>
+    </marker>
+  </defs>
+
+  <!-- sky and sea -->
+  <rect x="0" y="0" width="960" height="210" fill="url(#sky)"/>
+  <rect x="0" y="210" width="960" height="350" fill="#bfdcff"/>
+  <!-- waterline -->
+  <line x1="0" y1="210" x2="960" y2="210" stroke="#1f6feb" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="20" y="204" font-size="11" fill="#1f6feb" font-weight="700" letter-spacing="0.08em">SEA LEVEL ─── 見えている世界</text>
+
+  <!-- Iceberg shape -->
+  <!-- Above water: small triangle tip -->
+  <polygon points="440,90 520,90 560,210 400,210" fill="url(#ice-top)" stroke="#9ac3ea" stroke-width="1"/>
+  <!-- Below water: big iceberg body -->
+  <polygon points="400,210 560,210 640,330 660,440 540,530 400,530 280,440 310,330"
+           fill="url(#ice-bottom)" stroke="#6b8fcf" stroke-width="1"/>
+
+  <!-- Layer labels on iceberg -->
+  <!-- L1 Events -->
+  <text x="480" y="140" text-anchor="middle" font-size="15" font-weight="800" fill="#1f2430">出来事</text>
+  <text x="480" y="160" text-anchor="middle" font-size="11" fill="#5b6476" letter-spacing="0.08em">EVENTS</text>
+  <text x="480" y="180" text-anchor="middle" font-size="11" fill="#5b6476">今、何が起きた?</text>
+
+  <!-- L2 Patterns -->
+  <text x="480" y="270" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">パターン・傾向</text>
+  <text x="480" y="288" text-anchor="middle" font-size="11" fill="#eaf4ff" letter-spacing="0.08em">PATTERNS</text>
+  <text x="480" y="306" text-anchor="middle" font-size="11" fill="#eaf4ff">繰り返されているか?</text>
+
+  <!-- L3 Structure -->
+  <text x="480" y="372" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">構造</text>
+  <text x="480" y="390" text-anchor="middle" font-size="11" fill="#dbe7ff" letter-spacing="0.08em">STRUCTURE</text>
+  <text x="480" y="408" text-anchor="middle" font-size="11" fill="#dbe7ff">何がそれを生んでいる?</text>
+
+  <!-- L4 Mental Models -->
+  <text x="480" y="470" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">メンタルモデル</text>
+  <text x="480" y="488" text-anchor="middle" font-size="11" fill="#c9d6f0" letter-spacing="0.08em">MENTAL MODELS</text>
+  <text x="480" y="506" text-anchor="middle" font-size="11" fill="#c9d6f0">どんな思い込み・前提?</text>
+
+  <!-- Right-side annotations: reaction → leverage -->
+  <g font-family="inherit">
+    <rect x="700" y="105" width="230" height="60" rx="10" fill="#ffffff" stroke="#e3e6ef"/>
+    <text x="715" y="128" font-size="12" font-weight="700" fill="#60a5fa">反応(Reactive)</text>
+    <text x="715" y="148" font-size="11.5" fill="#5b6476">起きたことに対処する</text>
+    <text x="715" y="162" font-size="11.5" fill="#5b6476">例:「とりあえず謝る」</text>
+
+    <rect x="700" y="240" width="230" height="60" rx="10" fill="#ffffff" stroke="#e3e6ef"/>
+    <text x="715" y="263" font-size="12" font-weight="700" fill="#3b82f6">適応(Adaptive)</text>
+    <text x="715" y="283" font-size="11.5" fill="#5b6476">傾向に合わせて備える</text>
+    <text x="715" y="297" font-size="11.5" fill="#5b6476">例:「前日にアラーム」</text>
+
+    <rect x="700" y="350" width="230" height="60" rx="10" fill="#ffffff" stroke="#e3e6ef"/>
+    <text x="715" y="373" font-size="12" font-weight="700" fill="#1d4ed8">設計(Design)</text>
+    <text x="715" y="393" font-size="11.5" fill="#5b6476">仕組みを作り直す</text>
+    <text x="715" y="407" font-size="11.5" fill="#5b6476">例:「仕事の割り振り変更」</text>
+
+    <rect x="700" y="460" width="230" height="60" rx="10" fill="#ffffff" stroke="#e3e6ef"/>
+    <text x="715" y="483" font-size="12" font-weight="700" fill="#1e1b4b">変容(Transform)</text>
+    <text x="715" y="503" font-size="11.5" fill="#5b6476">前提・価値観を変える</text>
+    <text x="715" y="517" font-size="11.5" fill="#5b6476">例:「完璧主義を手放す」</text>
+  </g>
+
+  <!-- Leverage arrow on left -->
+  <g font-family="inherit">
+    <line x1="140" y1="120" x2="140" y2="500" stroke="#1f2430" stroke-width="2" marker-end="url(#arrow-down)"/>
+    <text x="130" y="115" font-size="12" font-weight="700" fill="#1f2430" text-anchor="end">浅い</text>
+    <text x="160" y="115" font-size="12" fill="#5b6476">見えやすい／効きは小さい</text>
+
+    <text x="130" y="520" font-size="12" font-weight="700" fill="#1f2430" text-anchor="end">深い</text>
+    <text x="160" y="520" font-size="12" fill="#5b6476">見えにくい／効き(レバレッジ)は大きい</text>
+
+    <text x="110" y="320" font-size="11" fill="#5b6476" transform="rotate(-90 110 320)" text-anchor="middle" letter-spacing="0.12em">LEVERAGE ↑</text>
+  </g>
+
+  <!-- "mostly hidden" note -->
+  <text x="820" y="200" font-size="11" fill="#1f6feb" text-anchor="middle" font-style="italic">水面下に 約9割</text>
+
+</svg>
+</div>
+<p class="diagram-caption">見えているのは氷山のほんの一角。下に降りるほど、<b>介入の“てこ”</b>は大きくなる。</p>
+
+<!-- LAYER CARDS -->
+<h2 class="section-title">各層をくわしく</h2>
+<div class="layers">
+
+  <div class="layer l1">
+    <div class="num">01<small>EVENTS</small></div>
+    <div>
+      <h3>出来事<span class="jp">単発の事実・現象</span></h3>
+      <div class="q">問い:「今、何が起きた?」</div>
+      <ul>
+        <li>今朝の会議で上司に怒られた</li>
+        <li>昨日のバイトでクレームが来た</li>
+        <li>テストで D 判定だった</li>
+      </ul>
+      <span class="leverage">反応のレベル｜効き:小</span>
+    </div>
+  </div>
+
+  <div class="layer l2">
+    <div class="num">02<small>PATTERNS</small></div>
+    <div>
+      <h3>パターン・傾向<span class="jp">繰り返し / 時系列の動き</span></h3>
+      <div class="q">問い:「これ、前にも起きていないか? いつ? どのくらいの頻度で?」</div>
+      <ul>
+        <li>「月末になるといつも残業が増える」</li>
+        <li>「プレゼン前日になるといつもお腹を壊す」</li>
+        <li>「3ヶ月に1度、貯金がゼロになる」</li>
+      </ul>
+      <span class="leverage">適応のレベル｜効き:中</span>
+    </div>
+  </div>
+
+  <div class="layer l3">
+    <div class="num">03<small>STRUCTURE</small></div>
+    <div>
+      <h3>構造<span class="jp">仕組み・ルール・関係性</span></h3>
+      <div class="q">問い:「どんな仕組み・関係性が、そのパターンを生み出している?」</div>
+      <ul>
+        <li>仕事の割り振り方、評価制度、締切の設定方法</li>
+        <li>情報の流れ方(誰が誰に、いつ伝えるか)</li>
+        <li>報酬や罰の与え方(無意識のインセンティブ設計)</li>
+      </ul>
+      <span class="leverage">設計のレベル｜効き:大</span>
+    </div>
+  </div>
+
+  <div class="layer l4">
+    <div class="num">04<small>MENTAL MODELS</small></div>
+    <div>
+      <h3>メンタルモデル<span class="jp">思い込み・価値観・前提</span></h3>
+      <div class="q">問い:「私たちは、何を“当たり前”だと思っているのか?」</div>
+      <ul>
+        <li>「頼るのは迷惑だ」「忙しいほど偉い」</li>
+        <li>「若手は黙って従うもの」「失敗は恥」</li>
+        <li>「努力=長時間労働」「安定=大企業」</li>
+      </ul>
+      <span class="leverage">変容のレベル｜効き:最大</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- EXAMPLES -->
+<h2 class="section-title">具体例で降りてみる(大学3年〜社会人3年目)</h2>
+
+<div class="example">
+  <div class="scene">EXAMPLE 01 ／ 社会人2〜3年目 · 仕事</div>
+  <h3>「また残業になってしまった…」</h3>
+  <div class="surface">先輩「お前、毎週金曜に残ってない?」 自分「…すみません、また終わらなくて。」</div>
+  <div class="steps">
+    <div class="step l1"><span class="tag">01 EVENTS</span><div>今週の金曜、また23時まで残業した。上司に心配された。</div></div>
+    <div class="step l2"><span class="tag">02 PATTERNS</span><div>思い返すと、<b>ほぼ毎週金曜の夜</b>に残業している。月曜は比較的余裕。週の後半ほど仕事が積み上がる傾向。</div></div>
+    <div class="step l3"><span class="tag">03 STRUCTURE</span><div>・月曜に週の仕事をまとめて振られる仕組み<br/>・見積もりを聞かれず「できます」と答える会話パターン<br/>・木曜に会議が集中して作業時間が消える<br/>・誰が何を抱えているか見える化されていない</div></div>
+    <div class="step l4"><span class="tag">04 MENTAL MODELS</span><div>「頼られたら断ってはいけない」「残業=頑張りの証」「新人はまず量をこなすべき」という思い込みが、自分の中にも上司の中にも染み込んでいる。</div></div>
+  </div>
+</div>
+
+<div class="example">
+  <div class="scene">EXAMPLE 02 ／ 大学3年 · お金</div>
+  <h3>「今月もまた月末カツカツ…」</h3>
+  <div class="surface">自分「あれ、もう残高8千円? 先月もそうだったような…」</div>
+  <div class="steps">
+    <div class="step l1"><span class="tag">01 EVENTS</span><div>4月28日、口座残高が8,000円に。友達との飲み会を断った。</div></div>
+    <div class="step l2"><span class="tag">02 PATTERNS</span><div>過去半年、<b>毎月25日〜月末にかけて必ず残高が急減</b>。給料日直後に使いすぎる傾向。</div></div>
+    <div class="step l3"><span class="tag">03 STRUCTURE</span><div>・1つの口座に給料・生活費・娯楽が全部入っている<br/>・家計簿をつける仕組みがない<br/>・サブスク4つが自動引き落とし<br/>・「安いから」と大容量を買ってしまう買い物習慣</div></div>
+    <div class="step l4"><span class="tag">04 MENTAL MODELS</span><div>「節約=我慢=つらいこと」「貯金は余ったらするもの」「収入が増えれば自然に貯まる」という前提。先取りする発想がそもそもない。</div></div>
+  </div>
+</div>
+
+<div class="example">
+  <div class="scene">EXAMPLE 03 ／ 大学3年〜社会人 · 人間関係</div>
+  <h3>「会議でまた発言できなかった…」</h3>
+  <div class="surface">自分「言いたいこと、あったんだけどな…。気づいたら別の話題になってた。」</div>
+  <div class="steps">
+    <div class="step l1"><span class="tag">01 EVENTS</span><div>今日のゼミ/定例会議で、結局一言も発言できなかった。</div></div>
+    <div class="step l2"><span class="tag">02 PATTERNS</span><div><b>5人以上の会議ではほぼ毎回</b>発言できていない。1対1なら問題なく話せる。</div></div>
+    <div class="step l3"><span class="tag">03 STRUCTURE</span><div>・議題が事前共有されない(準備できない)<br/>・発言する順番が決まっていない<br/>・声の大きい人が時間を占める<br/>・ファシリテーターが意見を振らない運営</div></div>
+    <div class="step l4"><span class="tag">04 MENTAL MODELS</span><div>「完璧に整理できてから話すべき」「的外れなことを言ったら評価が下がる」「発言しない=悪いこと、という罪悪感」。発言を“テスト”のように捉えている。</div></div>
+  </div>
+</div>
+
+<!-- CONNECTION -->
+<h2 class="section-title">前回の思考法と、どうつながる?</h2>
+<div class="connect">
+  氷山モデルは、<b>システムシンキングの“入口ツール”</b>として非常に使いやすいフレームです。
+  「パターン」「構造」で全体像を描くのがシステム思考、
+  そして各層で「それは本当か?」「本当にそれが原因か?」と検証するのが
+  <b>クリティカルシンキング</b>の役目。
+  <br /><br />
+  使う順番のおすすめは次のとおり:
+  <br />
+  ① 出来事を書き出す → ② パターンを洗い出す
+  → ③ 構造を図にする(システム思考) → ④ 各段階の根拠を疑う(クリティカル)
+  → ⑤ メンタルモデルを問い直す → ⑥ 打ち手を設計する。
+</div>
+
+<!-- HOW TO USE -->
+<h2 class="section-title">明日から使うための3ステップ</h2>
+<div class="tips">
+  <ol>
+    <li><b>「また」がキーワード。</b>「また◯◯してしまった」と感じたら、氷山を使うサイン。その出来事を1行で書く。</li>
+    <li><b>5回くらい繰り返している?</b>を自問して、頻度・タイミング・共通点(パターン)を書き出す。</li>
+    <li><b>「仕組み」「ルール」「思い込み」の順で下へ。</b>自分を責める前に、<b>構造を疑う</b>。最後に「どんな前提を手放すと楽になるか?」を問う。</li>
+  </ol>
+</div>
+
+<footer class="note">Iceberg Model · 見えている出来事は、ほんの一角。</footer>
+
+</div>
+</body>
+</html>
