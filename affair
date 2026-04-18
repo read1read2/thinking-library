@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>なぜ人は浮気をしてしまうのか — 氷山モデル分析とビジネスチャンス</title>
+<style>
+  :root {
+    --bg: #f7f8fb;
+    --ink: #1f2430;
+    --sub: #5b6476;
+    --line: #e3e6ef;
+    --card: #ffffff;
+    --shadow: 0 6px 24px rgba(31, 36, 48, 0.06);
+    --accent: #f59e0b;
+    --danger: #e11d48;
+
+    --L1: #60a5fa;
+    --L1-bg: #eaf3ff;
+    --L2: #3b82f6;
+    --L2-bg: #dce8ff;
+    --L3: #1d4ed8;
+    --L3-bg: #ccd9f7;
+    --L4: #1e1b4b;
+    --L4-bg: #c7c4e6;
+
+    --biz: #10a37f;
+    --biz-bg: #ecf8f3;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  header.hero { text-align: center; padding: 32px 16px 8px; }
+  header.hero .kicker {
+    display: inline-block; font-size: 12px; letter-spacing: 0.18em;
+    color: var(--sub); border: 1px solid var(--line);
+    padding: 4px 12px; border-radius: 999px; background: #fff;
+  }
+  header.hero h1 {
+    font-size: 32px; line-height: 1.4; margin: 16px 0 8px; letter-spacing: 0.01em;
+  }
+  header.hero p.lead {
+    color: var(--sub); max-width: 760px; margin: 8px auto 0; font-size: 15px;
+  }
+
+  h2.section-title {
+    font-size: 20px; margin: 56px 0 18px;
+    padding-left: 12px; border-left: 4px solid var(--accent);
+  }
+
+  /* framing box */
+  .framing {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 22px 26px;
+    font-size: 15px;
+  }
+  .framing b { color: var(--L3); }
+  .framing .warn {
+    margin-top: 14px;
+    background: #fff1f2;
+    border-left: 3px solid var(--danger);
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: #7f1d3a;
+  }
+
+  /* iceberg diagram (reused style) */
+  .diagram-wrap {
+    background: linear-gradient(180deg, #eaf4ff 0%, #eaf4ff 38%, #bfdcff 38%, #5b92d1 100%);
+    border-radius: 16px; box-shadow: var(--shadow);
+    padding: 10px 10px 14px; overflow-x: auto;
+  }
+  .diagram-wrap svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+
+  /* layer cards */
+  .layers { display: grid; gap: 14px; }
+  .layer {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 22px 24px;
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 20px;
+    border-left: 6px solid var(--line);
+  }
+  .layer .num { font-size: 34px; font-weight: 800; line-height: 1; padding-top: 4px; letter-spacing: -0.02em; }
+  .layer .num small { display: block; font-size: 10px; letter-spacing: 0.18em; font-weight: 600; color: var(--sub); margin-top: 8px; }
+  .layer h3 { margin: 0 0 4px; font-size: 18px; }
+  .layer h3 .jp { font-size: 13px; color: var(--sub); margin-left: 8px; font-weight: 500; }
+  .layer .q {
+    background: #fafbfe; border-radius: 10px; padding: 10px 14px;
+    font-size: 14px; color: var(--sub); margin: 10px 0 12px;
+    border-left: 3px solid var(--line);
+  }
+  .layer ul { margin: 0; padding-left: 20px; }
+  .layer ul li { margin-bottom: 4px; font-size: 14.5px; }
+  .layer.l1 { border-left-color: var(--L1); } .layer.l1 .num { color: var(--L1); } .layer.l1 .q { border-left-color: var(--L1); }
+  .layer.l2 { border-left-color: var(--L2); } .layer.l2 .num { color: var(--L2); } .layer.l2 .q { border-left-color: var(--L2); }
+  .layer.l3 { border-left-color: var(--L3); } .layer.l3 .num { color: var(--L3); } .layer.l3 .q { border-left-color: var(--L3); }
+  .layer.l4 { border-left-color: var(--L4); } .layer.l4 .num { color: var(--L4); } .layer.l4 .q { border-left-color: var(--L4); }
+
+  /* causal loop section */
+  .loop-wrap {
+    background: var(--card); border-radius: 16px;
+    box-shadow: var(--shadow); padding: 24px 16px 10px;
+    overflow-x: auto;
+  }
+  .loop-wrap svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+  .loop-caption { text-align: center; font-size: 13px; color: var(--sub); padding: 8px 16px 16px; }
+
+  /* business opportunity map */
+  .biz-grid {
+    display: grid; gap: 14px;
+    grid-template-columns: 1fr;
+  }
+  .biz {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 22px 24px;
+    border-top: 4px solid var(--biz);
+  }
+  .biz .head {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;
+  }
+  .biz h3 { margin: 0; font-size: 18px; }
+  .biz .layer-tag {
+    font-size: 11px; letter-spacing: 0.08em; font-weight: 700;
+    padding: 4px 10px; border-radius: 999px; white-space: nowrap;
+  }
+  .biz .one {
+    font-size: 14px; color: var(--sub); margin: 6px 0 14px;
+  }
+  .biz .grid2 {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  }
+  .biz .cell {
+    background: #fafbfe; border-radius: 10px; padding: 12px 14px;
+    font-size: 13.5px;
+  }
+  .biz .cell h4 { margin: 0 0 4px; font-size: 12px; letter-spacing: 0.06em; color: var(--sub); }
+  .biz .cell ul { margin: 0; padding-left: 18px; }
+  .biz .cell li { margin-bottom: 2px; }
+  .biz .refs {
+    margin-top: 10px; font-size: 12.5px; color: var(--sub);
+  }
+  .biz .refs b { color: var(--ink); }
+
+  .tag-l2 { background: var(--L2-bg); color: var(--L2); }
+  .tag-l3 { background: var(--L3-bg); color: var(--L3); }
+  .tag-l4 { background: var(--L4-bg); color: var(--L4); }
+
+  /* ethics */
+  .ethics {
+    background: linear-gradient(135deg, #fff7e6 0%, #fef2f2 100%);
+    border-radius: 16px;
+    padding: 26px 28px;
+    box-shadow: var(--shadow);
+    font-size: 15px;
+  }
+  .ethics b { color: var(--danger); }
+  .ethics ul { padding-left: 20px; margin: 10px 0 0; }
+  .ethics li { margin-bottom: 6px; }
+
+  /* summary */
+  .summary {
+    background: var(--card); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 22px 26px; font-size: 15px;
+  }
+  .summary ol { padding-left: 22px; margin: 6px 0 0; }
+  .summary ol li { margin-bottom: 6px; }
+
+  footer.note {
+    text-align: center; font-size: 12px; color: var(--sub); margin-top: 40px;
+  }
+
+  @media (max-width: 720px) {
+    header.hero h1 { font-size: 24px; }
+    .layer { grid-template-columns: 1fr; }
+    .biz .grid2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <span class="kicker">SYSTEMS × BUSINESS CASE</span>
+  <h1>なぜ人は浮気をしてしまうのか?</h1>
+  <p class="lead">個人を責めるのではなく、<b>氷山モデル</b>で水面下の構造を掘り下げ、<br />システム思考で因果のループを描き、<br />そこに“差し込める”ビジネスモデルを導きます。</p>
+</header>
+
+<!-- FRAMING -->
+<h2 class="section-title">前提:問いをクリティカルに見直す</h2>
+<div class="framing">
+  まず「浮気」という言葉自体をクリティカルに分解します。浮気は、
+  <b>身体的関係</b>なのか、<b>感情的な親密さ</b>(エモーショナル・アフェア)なのか、<b>デジタル上のやりとり</b>なのか、
+  文化・個人・カップルによって定義が大きく異なります。
+  <br /><br />
+  また「なぜ人は浮気するのか」という問いは、個人の性格に原因を帰属させやすい構造(<b>根本的帰属の誤り</b>)を生みます。
+  ここでは、あえて<b>環境と構造から見る</b>アプローチを取ります。
+  <div class="warn">
+    ⚠ 本資料は浮気を<b>肯定するものでも、免罪するものでもありません</b>。
+    行動の責任は個人にあります。一方で、予防・回復・支援を設計するには、
+    個人の倫理だけでなく「なぜそれが起きやすい環境があるのか」を理解することが有効です。
+  </div>
+</div>
+
+<!-- ICEBERG DIAGRAM -->
+<h2 class="section-title">氷山モデルで4層に分解する</h2>
+<div class="diagram-wrap">
+<svg viewBox="0 0 960 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Iceberg applied to infidelity.">
+  <defs>
+    <linearGradient id="ice-top" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eaf4ff"/>
+    </linearGradient>
+    <linearGradient id="ice-bottom" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cfe2f9"/>
+      <stop offset="0.5" stop-color="#6fa8d6"/>
+      <stop offset="1" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4faff"/><stop offset="1" stop-color="#dbecff"/>
+    </linearGradient>
+    <marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="9" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L5,10 L10,0 Z" fill="#1f2430"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="210" fill="url(#sky)"/>
+  <rect x="0" y="210" width="960" height="350" fill="#bfdcff"/>
+  <line x1="0" y1="210" x2="960" y2="210" stroke="#1f6feb" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="20" y="204" font-size="11" fill="#1f6feb" font-weight="700" letter-spacing="0.08em">SEA LEVEL ─── 表層に見えるもの</text>
+
+  <polygon points="440,90 520,90 560,210 400,210" fill="url(#ice-top)" stroke="#9ac3ea" stroke-width="1"/>
+  <polygon points="400,210 560,210 640,330 660,440 540,530 400,530 280,440 310,330"
+           fill="url(#ice-bottom)" stroke="#6b8fcf" stroke-width="1"/>
+
+  <!-- Layer texts specific to infidelity -->
+  <text x="480" y="138" text-anchor="middle" font-size="14" font-weight="800" fill="#1f2430">出来事</text>
+  <text x="480" y="158" text-anchor="middle" font-size="10.5" fill="#5b6476" letter-spacing="0.08em">EVENTS</text>
+  <text x="480" y="180" text-anchor="middle" font-size="10.5" fill="#5b6476">「同僚と一線を越えた」</text>
+
+  <text x="480" y="264" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">パターン</text>
+  <text x="480" y="282" text-anchor="middle" font-size="10.5" fill="#eaf4ff" letter-spacing="0.08em">PATTERNS</text>
+  <text x="480" y="302" text-anchor="middle" font-size="10.5" fill="#eaf4ff">倦怠期・出産後・昇進後に多い</text>
+
+  <text x="480" y="368" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">構造</text>
+  <text x="480" y="386" text-anchor="middle" font-size="10.5" fill="#dbe7ff" letter-spacing="0.08em">STRUCTURE</text>
+  <text x="480" y="406" text-anchor="middle" font-size="10.5" fill="#dbe7ff">会話減 / 承認の外注化 / 出会いの機会</text>
+
+  <text x="480" y="466" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">メンタルモデル</text>
+  <text x="480" y="484" text-anchor="middle" font-size="10.5" fill="#c9d6f0" letter-spacing="0.08em">MENTAL MODELS</text>
+  <text x="480" y="504" text-anchor="middle" font-size="10.5" fill="#c9d6f0">「結婚すれば自動で満たされるはず」</text>
+
+  <!-- right panel -->
+  <g font-family="inherit">
+    <rect x="700" y="105" width="240" height="58" rx="10" fill="#ffffff" stroke="#e3e6ef"/>
+    <text x="715" y="128" font-size="12" font-weight="700" fill="#60a5fa">反応のレベル</text>
+    <text x="715" y="148" font-size="11.5" fill="#5b6476">例:浮気調査・慰謝料請求</text>
+
+    <rect x="700" y="240" width="240" height="58" rx="10" fill="#ffffff" stroke="#e3e6ef"/>
+    <text x="715" y="263" font-size="12" font-weight="700" fill="#3b82f6">適応のレベル</text>
+    <text x="715" y="283" font-size="11.5" fill="#5b6476">例:倦怠期向けデート提案</text>
+
+    <rect x="700" y="350" width="240" height="58" rx="10" fill="#ffffff" stroke="#e3e6ef"/>
+    <text x="715" y="373" font-size="12" font-weight="700" fill="#1d4ed8">設計のレベル</text>
+    <text x="715" y="393" font-size="11.5" fill="#5b6476">例:関係性アプリ・カウンセリング</text>
+
+    <rect x="700" y="460" width="240" height="58" rx="10" fill="#ffffff" stroke="#e3e6ef"/>
+    <text x="715" y="483" font-size="12" font-weight="700" fill="#1e1b4b">変容のレベル</text>
+    <text x="715" y="503" font-size="11.5" fill="#5b6476">例:関係性の教育・価値観更新</text>
+  </g>
+
+  <g font-family="inherit">
+    <line x1="140" y1="120" x2="140" y2="500" stroke="#1f2430" stroke-width="2" marker-end="url(#arrow-down)"/>
+    <text x="130" y="115" font-size="12" font-weight="700" fill="#1f2430" text-anchor="end">浅い</text>
+    <text x="160" y="115" font-size="12" fill="#5b6476">症状対処・効き:小</text>
+    <text x="130" y="520" font-size="12" font-weight="700" fill="#1f2430" text-anchor="end">深い</text>
+    <text x="160" y="520" font-size="12" fill="#5b6476">根本解決・効き:大</text>
+  </g>
+
+  <text x="820" y="200" font-size="11" fill="#1f6feb" text-anchor="middle" font-style="italic">水面下に 約9割</text>
+</svg>
+</div>
+
+<!-- LAYER CARDS -->
+<h2 class="section-title">各層をくわしく</h2>
+<div class="layers">
+
+  <div class="layer l1">
+    <div class="num">01<small>EVENTS</small></div>
+    <div>
+      <h3>出来事<span class="jp">単発の行為・きっかけ</span></h3>
+      <div class="q">問い:「何が起きた?」</div>
+      <ul>
+        <li>同僚と二人飲みの帰り、一夜を共にした</li>
+        <li>元恋人とマッチングアプリで再会しやりとりが続いた</li>
+        <li>出張先でLINE交換、そのまま関係が発展</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="layer l2">
+    <div class="num">02<small>PATTERNS</small></div>
+    <div>
+      <h3>パターン・傾向<span class="jp">繰り返される条件・時期</span></h3>
+      <div class="q">問い:「浮気が起きやすい時・人・環境の傾向は?」</div>
+      <ul>
+        <li><b>ライフイベント後</b>:出産、育休明け、転勤、昇進、介護開始 など関係の役割が大きく変わる直後</li>
+        <li><b>倦怠期(交際3〜5年、結婚7年前後)</b>という時間的パターン</li>
+        <li><b>機会が多い環境</b>:夜の会食が多い職種、出張・単身赴任、副業・SNS運用など出会いが多い仕事</li>
+        <li><b>自己承認が下がるタイミング</b>:産後うつ、昇進停滞、40代キャリア見直し期</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="layer l3">
+    <div class="num">03<small>STRUCTURE</small></div>
+    <div>
+      <h3>構造<span class="jp">関係性・環境・仕組み</span></h3>
+      <div class="q">問い:「そのパターンを生む仕組み・関係性・環境は?」</div>
+      <ul>
+        <li><b>コミュニケーション構造</b>:本音を話す時間・場がない/察し合う文化/言わなくても伝わる神話</li>
+        <li><b>承認の非対称</b>:家庭で評価されない/仕事でしか褒められない、逆もまた然り</li>
+        <li><b>役割の固定化</b>:家事育児の偏在、経済依存、意思決定の非対称</li>
+        <li><b>空間・時間の構造</b>:長時間労働、単身赴任、リモートの孤立、スマホで秘密が作りやすい</li>
+        <li><b>出会いの市場</b>:マッチングアプリ、SNSのDM、職場の近接接触</li>
+        <li><b>離れにくい構造</b>:住宅ローン、子ども、親族、社会的体裁 → 不満があっても関係を変更するコストが高く、外部に出口を求めやすい</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="layer l4">
+    <div class="num">04<small>MENTAL MODELS</small></div>
+    <div>
+      <h3>メンタルモデル<span class="jp">思い込み・信念・文化的前提</span></h3>
+      <div class="q">問い:「当たり前」として疑われていない前提は何か?</div>
+      <ul>
+        <li><b>ロマンティック・ラブ信仰</b>:「運命の人なら永遠にときめくはず」「冷めたら愛ではない」</li>
+        <li><b>結婚=ゴール観</b>:「結婚すれば自動的に満たされる」「努力しなくても続く関係が“本物”」</li>
+        <li><b>性役割規範</b>:「男は外で女は家」「妻は母であるべきで女性である必要はない」</li>
+        <li><b>自己肯定の外注化</b>:「異性からの承認でしか自分の価値を確認できない」</li>
+        <li><b>個人主義の読み替え</b>:「バレなければ誰も傷つかない」という合理化</li>
+        <li><b>情動の不可抗力神話</b>:「恋は落ちるもので、選ぶものではない」</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- CAUSAL LOOP -->
+<h2 class="section-title">システム思考:浮気を生む“3つのループ”</h2>
+<div class="loop-wrap">
+<svg viewBox="0 0 960 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Causal loop diagram of infidelity.">
+  <defs>
+    <marker id="cl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#1f2430"/>
+    </marker>
+  </defs>
+
+  <!-- Loop 1: Communication avoidance -->
+  <g>
+    <text x="160" y="30" font-size="13" font-weight="700" fill="#1d4ed8">Loop 1｜会話回避ループ</text>
+    <circle cx="120" cy="90" r="42" fill="#ccd9f7" stroke="#1d4ed8" stroke-width="1.5"/>
+    <text x="120" y="88" text-anchor="middle" font-size="11.5" font-weight="700">小さな不満</text>
+    <text x="120" y="103" text-anchor="middle" font-size="11">が溜まる</text>
+
+    <circle cx="260" cy="90" r="42" fill="#ccd9f7" stroke="#1d4ed8" stroke-width="1.5"/>
+    <text x="260" y="88" text-anchor="middle" font-size="11.5" font-weight="700">言っても</text>
+    <text x="260" y="103" text-anchor="middle" font-size="11">無駄と学習</text>
+
+    <circle cx="300" cy="210" r="42" fill="#ccd9f7" stroke="#1d4ed8" stroke-width="1.5"/>
+    <text x="300" y="208" text-anchor="middle" font-size="11.5" font-weight="700">会話回避</text>
+    <text x="300" y="223" text-anchor="middle" font-size="11">・無関心</text>
+
+    <circle cx="150" cy="230" r="42" fill="#ccd9f7" stroke="#1d4ed8" stroke-width="1.5"/>
+    <text x="150" y="228" text-anchor="middle" font-size="11.5" font-weight="700">距離が広がる</text>
+    <text x="150" y="243" text-anchor="middle" font-size="11">孤独感↑</text>
+
+    <path d="M 162 90 Q 200 70 218 90" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 280 130 Q 300 170 298 170" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 260 220 Q 220 230 190 230" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 128 190 Q 110 150 112 130" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <text x="210" y="160" font-size="11" fill="#1d4ed8" font-weight="700">R(強化)</text>
+  </g>
+
+  <!-- Loop 2: Approval outsourcing -->
+  <g>
+    <text x="510" y="30" font-size="13" font-weight="700" fill="#b45309">Loop 2｜承認の外注ループ</text>
+    <circle cx="490" cy="90" r="42" fill="#fff0cf" stroke="#b45309" stroke-width="1.5"/>
+    <text x="490" y="88" text-anchor="middle" font-size="11.5" font-weight="700">家庭で</text>
+    <text x="490" y="103" text-anchor="middle" font-size="11">褒められない</text>
+
+    <circle cx="640" cy="90" r="42" fill="#fff0cf" stroke="#b45309" stroke-width="1.5"/>
+    <text x="640" y="88" text-anchor="middle" font-size="11.5" font-weight="700">自己肯定</text>
+    <text x="640" y="103" text-anchor="middle" font-size="11">感の低下</text>
+
+    <circle cx="720" cy="210" r="42" fill="#fff0cf" stroke="#b45309" stroke-width="1.5"/>
+    <text x="720" y="208" text-anchor="middle" font-size="11.5" font-weight="700">外の承認</text>
+    <text x="720" y="223" text-anchor="middle" font-size="11">を求める</text>
+
+    <circle cx="530" cy="230" r="42" fill="#fff0cf" stroke="#b45309" stroke-width="1.5"/>
+    <text x="530" y="228" text-anchor="middle" font-size="11.5" font-weight="700">SNS/職場で</text>
+    <text x="530" y="243" text-anchor="middle" font-size="11">好意を得る</text>
+
+    <path d="M 532 90 Q 570 70 598 90" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 660 130 Q 700 170 720 168" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 678 225 Q 620 240 572 232" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 500 192 Q 470 150 475 130" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <text x="610" y="160" font-size="11" fill="#b45309" font-weight="700">R(強化)</text>
+  </g>
+
+  <!-- Loop 3: Opportunity -->
+  <g>
+    <text x="320" y="330" font-size="13" font-weight="700" fill="#10a37f">Loop 3｜機会増幅ループ</text>
+    <circle cx="260" cy="410" r="42" fill="#ecf8f3" stroke="#10a37f" stroke-width="1.5"/>
+    <text x="260" y="408" text-anchor="middle" font-size="11.5" font-weight="700">SNS利用</text>
+    <text x="260" y="423" text-anchor="middle" font-size="11">・DM増</text>
+
+    <circle cx="430" cy="380" r="42" fill="#ecf8f3" stroke="#10a37f" stroke-width="1.5"/>
+    <text x="430" y="378" text-anchor="middle" font-size="11.5" font-weight="700">小さな秘密</text>
+    <text x="430" y="393" text-anchor="middle" font-size="11">が生まれる</text>
+
+    <circle cx="610" cy="400" r="42" fill="#ecf8f3" stroke="#10a37f" stroke-width="1.5"/>
+    <text x="610" y="398" text-anchor="middle" font-size="11.5" font-weight="700">隠す快感と</text>
+    <text x="610" y="413" text-anchor="middle" font-size="11">刺激</text>
+
+    <circle cx="760" cy="440" r="42" fill="#ecf8f3" stroke="#10a37f" stroke-width="1.5"/>
+    <text x="760" y="438" text-anchor="middle" font-size="11.5" font-weight="700">一線を</text>
+    <text x="760" y="453" text-anchor="middle" font-size="11">越えやすく</text>
+
+    <path d="M 302 405 Q 360 380 388 380" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 472 385 Q 540 390 568 395" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 650 415 Q 700 430 720 435" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 720 460 Q 500 500 290 450" fill="none" stroke="#1f2430" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#cl-arrow)"/>
+    <text x="500" y="485" font-size="11" fill="#10a37f" font-weight="700">R(強化ループ:戻ってくる)</text>
+  </g>
+</svg>
+</div>
+<p class="loop-caption">3つの<b>自己強化ループ(R)</b>が同時に回ると、個々の倫理観とは関係なく“浮気が起きやすい状態”が出来上がる。</p>
+
+<!-- BUSINESS -->
+<h2 class="section-title">“差し込める”ビジネスモデル:層別の打ち手</h2>
+<div class="framing" style="margin-bottom: 18px;">
+  レバレッジが大きいのは<b>構造(L3)とメンタルモデル(L4)</b>の層。
+  下に降りるほど市場としては未成熟ですが、参入余地と社会的意義は大きい領域です。
+  既存プレイヤーが多いのはL1(探偵・慰謝料)で、ブルーオーシャンはL3〜L4にあります。
+</div>
+
+<div class="biz-grid">
+
+  <!-- Biz 1 -->
+  <div class="biz">
+    <div class="head">
+      <h3>① 夫婦・カップル向け関係性OSアプリ</h3>
+      <span class="layer-tag tag-l3">L3 構造への介入</span>
+    </div>
+    <div class="one">「会話の不足」という構造的欠陥を、UI/UXで強制的に埋める日常ツール。</div>
+    <div class="grid2">
+      <div class="cell"><h4>PROBLEM</h4>
+        <ul><li>本音を話す時間も型もない</li><li>「話さなくても分かる」神話で誤解が蓄積</li></ul>
+      </div>
+      <div class="cell"><h4>SOLUTION</h4>
+        <ul><li>毎日1問の対話カード(感情・将来・性・お金)</li><li>週次/月次レビューで二人の状態を可視化</li><li>AIが沈黙期を検出 → 介入プロンプト</li></ul>
+      </div>
+      <div class="cell"><h4>MONETIZE</h4>
+        <ul><li>個人サブスク(月1,200円)</li><li>プレミアム:専門家チャット</li></ul>
+      </div>
+      <div class="cell"><h4>MOAT</h4>
+        <ul><li>対話ログの蓄積が最大の参入障壁</li><li>カップル単位でLTV長期化</li></ul>
+      </div>
+    </div>
+    <div class="refs"><b>参考:</b> Paired / Lasting / Relish(海外) ／ 国内はまだ空白が大きい。</div>
+  </div>
+
+  <!-- Biz 2 -->
+  <div class="biz">
+    <div class="head">
+      <h3>② オンライン夫婦カウンセリング・プラットフォーム</h3>
+      <span class="layer-tag tag-l3">L3 / L4</span>
+    </div>
+    <div class="one">“浮気が起きてから”ではなく“違和感を感じた時”に気軽に使える心理専門家ネットワーク。</div>
+    <div class="grid2">
+      <div class="cell"><h4>PROBLEM</h4>
+        <ul><li>深刻化してからしか相談しない</li><li>専門家へのアクセスが遠い・高い・重い</li></ul>
+      </div>
+      <div class="cell"><h4>SOLUTION</h4>
+        <ul><li>夫婦別々に匿名相談 → 合意時に合同セッション</li><li>非対面・短時間・月額プラン</li><li>ライフイベント(出産後/昇進後)パッケージ</li></ul>
+      </div>
+      <div class="cell"><h4>MONETIZE</h4>
+        <ul><li>B2C サブスク</li><li>B2B:企業EAP・保険付帯サービス</li></ul>
+      </div>
+      <div class="cell"><h4>MOAT</h4>
+        <ul><li>カウンセラーネットワークの質と量</li><li>臨床データ × AIトリアージ</li></ul>
+      </div>
+    </div>
+    <div class="refs"><b>参考:</b> Talkspace / Regain(米) ／ 国内カウンセリング市場は供給不足。</div>
+  </div>
+
+  <!-- Biz 3 -->
+  <div class="biz">
+    <div class="head">
+      <h3>③ ライフイベント連動“関係リトリート”サブスク</h3>
+      <span class="layer-tag tag-l2">L2 / L3</span>
+    </div>
+    <div class="one">倦怠期・出産後・昇進後など、浮気の確率が上がるタイミングに合わせた“関係の再接続”体験。</div>
+    <div class="grid2">
+      <div class="cell"><h4>PROBLEM</h4>
+        <ul><li>日常に戻ると関係を整える時間がない</li><li>旅行に行ってもスマホで仕事を持ち込んでしまう</li></ul>
+      </div>
+      <div class="cell"><h4>SOLUTION</h4>
+        <ul><li>1泊2日のカップル合宿+コーチ付き</li><li>結婚記念日・出産後6ヶ月など<b>予約型トリガー</b></li><li>ベビーシッター・介護代行連動</li></ul>
+      </div>
+      <div class="cell"><h4>MONETIZE</h4>
+        <ul><li>ホテル・温泉と提携した体験単価(1組5〜15万円)</li><li>年数回のサブスク・プレミア層向け</li></ul>
+      </div>
+      <div class="cell"><h4>MOAT</h4>
+        <ul><li>ホテル×心理専門家のネットワーク</li><li>ライフイベントデータを軸にしたCRM</li></ul>
+      </div>
+    </div>
+    <div class="refs"><b>参考:</b> 海外の“couples retreat”市場 ／ 国内は星野リゾート的ブランドと相性が良い。</div>
+  </div>
+
+  <!-- Biz 4 -->
+  <div class="biz">
+    <div class="head">
+      <h3>④ プレマリタル&パートナー教育メディア</h3>
+      <span class="layer-tag tag-l4">L4 メンタルモデルへの介入</span>
+    </div>
+    <div class="one">「結婚=ゴール」「運命の人なら永遠に愛せる」などの思い込みを書き換える、結婚<b>前</b>からの教育層。</div>
+    <div class="grid2">
+      <div class="cell"><h4>PROBLEM</h4>
+        <ul><li>家庭科・性教育で関係性の運用を学ぶ機会がない</li><li>期待値のズレが結婚後に顕在化</li></ul>
+      </div>
+      <div class="cell"><h4>SOLUTION</h4>
+        <ul><li>動画・ワークブック・コミュニティで学ぶ講座</li><li>価値観・性・お金・子育てを事前にすり合わせ</li><li>結婚相談所・ブライダル企業とバンドル</li></ul>
+      </div>
+      <div class="cell"><h4>MONETIZE</h4>
+        <ul><li>B2Cコース(5〜10万円)</li><li>B2B2C:結婚相談所・式場に組込み</li></ul>
+      </div>
+      <div class="cell"><h4>MOAT</h4>
+        <ul><li>コンテンツブランドと卒業生コミュニティ</li><li>婚前データ → 婚後SaaS(①へ接続)</li></ul>
+      </div>
+    </div>
+    <div class="refs"><b>参考:</b> Prepare/Enrich(米) の心理検査モデル ／ 国内は空白市場。</div>
+  </div>
+
+  <!-- Biz 5 -->
+  <div class="biz">
+    <div class="head">
+      <h3>⑤ 企業向け「家族・関係性」EAPサービス</h3>
+      <span class="layer-tag tag-l3">L3 B2B</span>
+    </div>
+    <div class="one">単身赴任・長時間労働・転勤など、企業側の構造が離婚・浮気リスクを作っている。離職・生産性低下を防ぐ切り口。</div>
+    <div class="grid2">
+      <div class="cell"><h4>PROBLEM</h4>
+        <ul><li>家庭の破綻 → メンタル不調 → 離職・休職</li><li>従来のEAPはメンタル中心で家族に届かない</li></ul>
+      </div>
+      <div class="cell"><h4>SOLUTION</h4>
+        <ul><li>従業員の<b>家族</b>にも使える関係性サポート</li><li>単身赴任者向けパッケージ</li><li>転勤・出産時のオンボーディング支援</li></ul>
+      </div>
+      <div class="cell"><h4>MONETIZE</h4>
+        <ul><li>人事・総務部門に年額契約(従業員1人あたり◯円)</li></ul>
+      </div>
+      <div class="cell"><h4>MOAT</h4>
+        <ul><li>大企業の導入実績×労働組合との接続</li><li>離職率改善のエビデンス</li></ul>
+      </div>
+    </div>
+    <div class="refs"><b>参考:</b> 海外EAP(Lyra, Modern Health) ／ 国内はメンタル中心で関係性領域が未開拓。</div>
+  </div>
+
+</div>
+
+<!-- ETHICS -->
+<h2 class="section-title">ビジネス設計で必ず考えたい倫理</h2>
+<div class="ethics">
+  浮気というテーマには、<b>ビジネスが問題を“悪化”させる方向</b>にも進みやすい特徴があります。
+  設計時には、以下を自問する必要があります。
+  <ul>
+    <li>このサービスは<b>出会いの機会(L3)を増幅する側</b>ではないか?(既婚者マッチング、匿名DMなど)</li>
+    <li><b>監視・疑心を商品化</b>していないか?(GPS常時共有、メッセージ覗き見等は関係悪化を助長)</li>
+    <li>一方の当事者が<b>もう一方の同意なく</b>使う設計になっていないか?</li>
+    <li>問題を<b>個人の性格問題に還元</b>し、構造を隠すマーケティングになっていないか?</li>
+    <li>多様な家族観(事実婚・同性パートナー・ポリアモリー等)を<b>排除</b>していないか?</li>
+  </ul>
+</div>
+
+<!-- SUMMARY -->
+<h2 class="section-title">まとめ:答えを1枚で</h2>
+<div class="summary">
+  <ol>
+    <li><b>浮気は個人の弱さの問題だけではない。</b>パターン・構造・メンタルモデルの合流点で確率的に起きる。</li>
+    <li>レバレッジの大きい介入は、L3「関係性の構造」とL4「思い込みの更新」にある。</li>
+    <li>ブルーオーシャンは <b>①関係性OSアプリ / ②夫婦カウンセリング / ③ライフイベント連動リトリート / ④プレマリタル教育 / ⑤企業向け関係性EAP</b>。</li>
+    <li>L1(探偵・慰謝料)は市場は大きいが症状対処。差別化するなら“予防・再構築”の上流に行く。</li>
+    <li>設計では<b>機会増幅・監視商品化・個人責任化</b>の3つの罠を避ける。</li>
+  </ol>
+</div>
+
+<footer class="note">Iceberg × Systems × Business · 構造から始めると、打ち手が変わる。</footer>
+
+</div>
+</body>
+</html>
