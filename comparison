@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>システムシンキング × クリティカルシンキング — 違いと使い分け</title>
+<style>
+  :root {
+    --bg: #f7f8fb;
+    --ink: #1f2430;
+    --sub: #5b6476;
+    --line: #e3e6ef;
+    --critical: #2563eb;      /* 深い青 */
+    --critical-bg: #eff5ff;
+    --system: #10a37f;        /* 広い緑 */
+    --system-bg: #ecf8f3;
+    --accent: #f59e0b;
+    --card: #ffffff;
+    --shadow: 0 6px 24px rgba(31, 36, 48, 0.06);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  header.hero {
+    text-align: center;
+    padding: 32px 16px 8px;
+  }
+  header.hero .kicker {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--sub);
+    border: 1px solid var(--line);
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: #fff;
+  }
+  header.hero h1 {
+    font-size: 34px;
+    line-height: 1.35;
+    margin: 16px 0 8px;
+    letter-spacing: 0.01em;
+  }
+  header.hero h1 .vs { color: var(--accent); margin: 0 10px; font-weight: 500; }
+  header.hero p.lead {
+    color: var(--sub);
+    max-width: 720px;
+    margin: 8px auto 0;
+    font-size: 15px;
+  }
+
+  h2.section-title {
+    font-size: 20px;
+    margin: 56px 0 18px;
+    padding-left: 12px;
+    border-left: 4px solid var(--accent);
+  }
+
+  /* one-liner */
+  .oneliner {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 22px 28px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .oneliner .label {
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+  .oneliner .c-label { color: var(--critical); background: var(--critical-bg); }
+  .oneliner .s-label { color: var(--system); background: var(--system-bg); }
+  .oneliner .txt { font-size: 15px; color: var(--ink); }
+  .oneliner .row { display: flex; align-items: center; gap: 14px; flex: 1 1 420px; }
+
+  /* definition cards */
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .card {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 24px 26px;
+    border-top: 4px solid var(--line);
+  }
+  .card.c { border-top-color: var(--critical); }
+  .card.s { border-top-color: var(--system); }
+  .card h3 { margin: 0 0 6px; font-size: 18px; }
+  .card h3 small { display: block; font-size: 12px; color: var(--sub); font-weight: 500; letter-spacing: 0.1em; margin-top: 2px; }
+  .card .question {
+    margin-top: 12px;
+    background: #fafbfe;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+    color: var(--sub);
+    border-left: 3px solid var(--line);
+  }
+  .card.c .question { border-left-color: var(--critical); }
+  .card.s .question { border-left-color: var(--system); }
+  .card ul { margin: 10px 0 0; padding-left: 20px; }
+  .card ul li { margin-bottom: 4px; font-size: 14.5px; }
+
+  /* diagram */
+  .diagram-wrap {
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 28px 20px 10px;
+    overflow-x: auto;
+  }
+  .diagram-wrap svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+  .diagram-caption {
+    text-align: center;
+    font-size: 13px;
+    color: var(--sub);
+    padding: 8px 16px 16px;
+  }
+
+  /* example */
+  .example {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 22px 26px;
+    margin-bottom: 18px;
+  }
+  .example .scene {
+    font-size: 13px;
+    color: var(--sub);
+    letter-spacing: 0.06em;
+  }
+  .example h3 {
+    margin: 4px 0 14px;
+    font-size: 17px;
+  }
+  .example .quote {
+    background: #fff7e6;
+    border-left: 3px solid var(--accent);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 14.5px;
+    margin-bottom: 16px;
+    color: #5c4512;
+  }
+  .example .pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .example .box {
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+  .example .box.c { background: var(--critical-bg); border: 1px solid #d8e5ff; }
+  .example .box.s { background: var(--system-bg); border: 1px solid #d2ebe0; }
+  .example .box h4 {
+    margin: 0 0 8px; font-size: 13px; letter-spacing: 0.06em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .example .box.c h4 { color: var(--critical); }
+  .example .box.s h4 { color: var(--system); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot.c { background: var(--critical); }
+  .dot.s { background: var(--system); }
+  .example .box ul { padding-left: 18px; margin: 6px 0 0; }
+  .example .box li { margin-bottom: 4px; }
+
+  /* combine section */
+  .combine {
+    background: linear-gradient(135deg, #eff5ff 0%, #ecf8f3 100%);
+    border-radius: 16px;
+    padding: 28px 28px;
+    box-shadow: var(--shadow);
+  }
+  .combine h3 { margin: 0 0 10px; }
+  .combine p { margin: 0 0 8px; font-size: 15px; }
+  .combine .flow {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; align-items: center;
+  }
+  .combine .chip {
+    background: #fff;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13px;
+    border: 1px solid var(--line);
+  }
+  .combine .arrow { color: var(--sub); font-size: 16px; }
+
+  /* summary */
+  table.summary {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    font-size: 14px;
+  }
+  table.summary th, table.summary td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  table.summary th { background: #fafbfe; font-weight: 600; color: var(--sub); width: 22%; }
+  table.summary td.c { color: var(--critical); }
+  table.summary td.s { color: var(--system); }
+  table.summary tr:last-child td, table.summary tr:last-child th { border-bottom: none; }
+
+  footer.note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--sub);
+    margin-top: 40px;
+  }
+
+  @media (max-width: 720px) {
+    .cards, .example .pair { grid-template-columns: 1fr; }
+    header.hero h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <span class="kicker">THINKING FRAMEWORK</span>
+  <h1>クリティカルシンキング<span class="vs">×</span>システムシンキング</h1>
+  <p class="lead">似ているようで、役割がまったく違う2つの思考法。<br />「深く掘る」のがクリティカル、「広くつなげる」のがシステム。使い分けられると、考える力が一段上がります。</p>
+</header>
+
+<!-- === ONE-LINER === -->
+<h2 class="section-title">一言で言うと</h2>
+<div class="oneliner">
+  <div class="row">
+    <span class="label c-label">CRITICAL</span>
+    <span class="txt"><b>「それ、本当?」</b>と問い、主張・前提・根拠を<b>検証</b>する思考。</span>
+  </div>
+  <div class="row">
+    <span class="label s-label">SYSTEM</span>
+    <span class="txt"><b>「何と何がつながってる?」</b>と問い、全体の<b>構造</b>を捉える思考。</span>
+  </div>
+</div>
+
+<!-- === DEFINITIONS === -->
+<h2 class="section-title">それぞれの定義と特徴</h2>
+<div class="cards">
+  <div class="card c">
+    <h3>クリティカルシンキング<small>CRITICAL THINKING ／ 批判的思考</small></h3>
+    <div class="question">問い:「この主張は正しいか? 根拠は十分か?」</div>
+    <ul>
+      <li>前提・根拠・論理の飛躍を疑う</li>
+      <li>バイアスや感情を切り離して検証する</li>
+      <li>反証・別解釈を積極的に探す</li>
+      <li>ズーム <b>イン</b>:1つの論点を深く掘る</li>
+      <li>得意分野:意思決定の精度を上げる</li>
+    </ul>
+  </div>
+  <div class="card s">
+    <h3>システムシンキング<small>SYSTEMS THINKING ／ 全体思考</small></h3>
+    <div class="question">問い:「全体として何が起きているのか? どうつながっているのか?」</div>
+    <ul>
+      <li>要素の相互作用・因果のループを可視化</li>
+      <li>短期の症状ではなく長期の構造を見る</li>
+      <li>「部分最適」より「全体最適」を狙う</li>
+      <li>ズーム <b>アウト</b>:関係性を俯瞰する</li>
+      <li>得意分野:根本原因を突き止める</li>
+    </ul>
+  </div>
+</div>
+
+<!-- === DIAGRAM === -->
+<h2 class="section-title">図で見る違い:「縦に掘る」vs「横につなげる」</h2>
+<div class="diagram-wrap">
+<svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Critical thinking drills vertically into a claim; systems thinking connects elements horizontally.">
+  <defs>
+    <marker id="arrow-c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#10a37f"/>
+    </marker>
+    <marker id="arrow-s-curve" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#10a37f"/>
+    </marker>
+  </defs>
+
+  <!-- ===== LEFT: Critical (vertical drill) ===== -->
+  <g font-family="inherit">
+    <text x="30" y="34" font-size="14" font-weight="700" fill="#2563eb">CRITICAL THINKING</text>
+    <text x="30" y="54" font-size="12" fill="#5b6476">深く掘る(縦の思考)</text>
+
+    <!-- Claim at top -->
+    <rect x="100" y="75" width="280" height="48" rx="10" fill="#eff5ff" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="240" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2430">主張・情報</text>
+    <text x="240" y="114" text-anchor="middle" font-size="12" fill="#5b6476">「A社は成長している」</text>
+
+    <!-- drill arrow -->
+    <line x1="240" y1="128" x2="240" y2="380" stroke="#2563eb" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow-c)"/>
+
+    <!-- layers of questions -->
+    <g>
+      <rect x="60" y="150" width="360" height="40" rx="8" fill="#ffffff" stroke="#d8e5ff"/>
+      <text x="75" y="175" font-size="12.5" fill="#1f2430">① 根拠は?(データの出所・期間)</text>
+    </g>
+    <g>
+      <rect x="60" y="200" width="360" height="40" rx="8" fill="#ffffff" stroke="#d8e5ff"/>
+      <text x="75" y="225" font-size="12.5" fill="#1f2430">② 前提は妥当?(「成長」の定義は?)</text>
+    </g>
+    <g>
+      <rect x="60" y="250" width="360" height="40" rx="8" fill="#ffffff" stroke="#d8e5ff"/>
+      <text x="75" y="275" font-size="12.5" fill="#1f2430">③ 論理に飛躍は?(売上↑=成長?)</text>
+    </g>
+    <g>
+      <rect x="60" y="300" width="360" height="40" rx="8" fill="#ffffff" stroke="#d8e5ff"/>
+      <text x="75" y="325" font-size="12.5" fill="#1f2430">④ 反証は?(利益率は? 離職率は?)</text>
+    </g>
+
+    <text x="240" y="400" text-anchor="middle" font-size="12" fill="#2563eb" font-weight="600">結論:本当に信頼できる?</text>
+  </g>
+
+  <!-- Divider -->
+  <line x1="480" y1="40" x2="480" y2="400" stroke="#e3e6ef" stroke-width="1" stroke-dasharray="3 5"/>
+
+  <!-- ===== RIGHT: Systems (network) ===== -->
+  <g font-family="inherit">
+    <text x="510" y="34" font-size="14" font-weight="700" fill="#10a37f">SYSTEMS THINKING</text>
+    <text x="510" y="54" font-size="12" fill="#5b6476">広くつなげる(横の思考)</text>
+
+    <!-- Nodes -->
+    <!-- 採用 -->
+    <g>
+      <circle cx="580" cy="130" r="38" fill="#ecf8f3" stroke="#10a37f" stroke-width="1.5"/>
+      <text x="580" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2430">採用</text>
+      <text x="580" y="145" text-anchor="middle" font-size="10.5" fill="#5b6476">入口</text>
+    </g>
+    <!-- 育成 -->
+    <g>
+      <circle cx="780" cy="130" r="38" fill="#ecf8f3" stroke="#10a37f" stroke-width="1.5"/>
+      <text x="780" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2430">育成</text>
+      <text x="780" y="145" text-anchor="middle" font-size="10.5" fill="#5b6476">成長</text>
+    </g>
+    <!-- 評価 -->
+    <g>
+      <circle cx="880" cy="250" r="38" fill="#ecf8f3" stroke="#10a37f" stroke-width="1.5"/>
+      <text x="880" y="248" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2430">評価</text>
+      <text x="880" y="265" text-anchor="middle" font-size="10.5" fill="#5b6476">報酬</text>
+    </g>
+    <!-- モチベ -->
+    <g>
+      <circle cx="680" cy="320" r="38" fill="#ecf8f3" stroke="#10a37f" stroke-width="1.5"/>
+      <text x="680" y="318" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2430">やる気</text>
+      <text x="680" y="335" text-anchor="middle" font-size="10.5" fill="#5b6476">定着</text>
+    </g>
+    <!-- 離職 -->
+    <g>
+      <circle cx="500" cy="250" r="38" fill="#ecf8f3" stroke="#10a37f" stroke-width="1.5"/>
+      <text x="500" y="248" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2430">離職</text>
+      <text x="500" y="265" text-anchor="middle" font-size="10.5" fill="#5b6476">出口</text>
+    </g>
+
+    <!-- Arrows forming a feedback loop -->
+    <path d="M 618 130 Q 700 110 742 130" fill="none" stroke="#10a37f" stroke-width="1.8" marker-end="url(#arrow-s-curve)"/>
+    <path d="M 808 160 Q 870 200 872 212" fill="none" stroke="#10a37f" stroke-width="1.8" marker-end="url(#arrow-s-curve)"/>
+    <path d="M 850 280 Q 780 320 718 320" fill="none" stroke="#10a37f" stroke-width="1.8" marker-end="url(#arrow-s-curve)"/>
+    <path d="M 642 320 Q 560 310 520 282" fill="none" stroke="#10a37f" stroke-width="1.8" marker-end="url(#arrow-s-curve)"/>
+    <path d="M 510 212 Q 540 150 560 140" fill="none" stroke="#10a37f" stroke-width="1.8" stroke-dasharray="4 4" marker-end="url(#arrow-s-curve)"/>
+
+    <!-- loop label -->
+    <text x="690" y="230" text-anchor="middle" font-size="11.5" fill="#10a37f" font-weight="600">フィードバック ループ</text>
+
+    <text x="690" y="400" text-anchor="middle" font-size="12" fill="#10a37f" font-weight="600">結論:どのつながりを変えると全体が変わる?</text>
+  </g>
+</svg>
+</div>
+<p class="diagram-caption">クリティカルは1つの主張を<b>垂直に掘り下げる</b>。システムは複数要素の<b>つながりを俯瞰</b>して因果のループを見る。</p>
+
+<!-- === EXAMPLES === -->
+<h2 class="section-title">具体例で体感する(大学3年〜社会人3年目向け)</h2>
+
+<!-- Example 1 -->
+<div class="example">
+  <div class="scene">EXAMPLE 01 ／ 就活・キャリア選択</div>
+  <h3>OB訪問で「うちは成長企業だよ!」と言われた</h3>
+  <div class="quote">先輩「売上もどんどん伸びてるし、若手が活躍できる環境だよ。うちおすすめ!」</div>
+  <div class="pair">
+    <div class="box c">
+      <h4><span class="dot c"></span>CRITICAL の使い方</h4>
+      <ul>
+        <li>「売上が伸びている」は何年分のデータ? 利益は?</li>
+        <li>「若手が活躍」の定義は?(役職? 裁量? 離職率?)</li>
+        <li>先輩は会社を好きでいたいバイアスがないか?</li>
+        <li>IR情報・口コミ・業界平均と照らして検証する</li>
+      </ul>
+    </div>
+    <div class="box s">
+      <h4><span class="dot s"></span>SYSTEM の使い方</h4>
+      <ul>
+        <li>業界全体の構造:追い風か、逆風か?</li>
+        <li>会社の成長 → 採用増 → 育成負荷 → 若手の離職、のループはないか?</li>
+        <li>自分の価値観・スキル・5年後の市場、どうつながるか?</li>
+        <li>「会社単体」ではなく「自分×会社×業界」の関係で見る</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Example 2 -->
+<div class="example">
+  <div class="scene">EXAMPLE 02 ／ ゼミ・卒論</div>
+  <h3>ゼミで「SNSは若者の孤独を増やしている」と発表したい</h3>
+  <div class="quote">自分「最近の調査でSNS利用時間が長い人ほど孤独感が高いみたいなんです!」</div>
+  <div class="pair">
+    <div class="box c">
+      <h4><span class="dot c"></span>CRITICAL の使い方</h4>
+      <ul>
+        <li>その調査の標本数・対象年齢は?</li>
+        <li>相関と因果を混同していないか?(孤独な人ほどSNSを使う可能性)</li>
+        <li>反対の結果を示した研究はないか?</li>
+        <li>「孤独感」の測定方法は妥当か?</li>
+      </ul>
+    </div>
+    <div class="box s">
+      <h4><span class="dot s"></span>SYSTEM の使い方</h4>
+      <ul>
+        <li>孤独を生む要因全体をマップ化:家族・学校・経済・都市化・SNS</li>
+        <li>SNSは「孤独を増やす」のか「孤独を可視化する」のか?</li>
+        <li>利用時間↑→承認欲求↑→投稿↑→比較↑→孤独↑、のループが回ってないか?</li>
+        <li>介入するなら、ループのどこを切ると全体が変わる?</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Example 3 -->
+<div class="example">
+  <div class="scene">EXAMPLE 03 ／ 社会人2〜3年目・職場の悩み</div>
+  <h3>上司「うちのチーム、最近新人がすぐ辞めるんだよね…何とかして」</h3>
+  <div class="quote">上司「研修にもっと予算をかけるべきかな? とりあえず福利厚生を足そうか。」</div>
+  <div class="pair">
+    <div class="box c">
+      <h4><span class="dot c"></span>CRITICAL の使い方</h4>
+      <ul>
+        <li>本当に離職率は高い?(業界平均・過去3年と比較)</li>
+        <li>「すぐ辞める」の「すぐ」とは何ヶ月?</li>
+        <li>研修予算↑で離職↓の根拠データはある?</li>
+        <li>退職理由のヒアリングは客観的に取れているか?</li>
+      </ul>
+    </div>
+    <div class="box s">
+      <h4><span class="dot s"></span>SYSTEM の使い方</h4>
+      <ul>
+        <li>採用 → オンボーディング → 最初の仕事 → 上司の関わり方 → 評価 → 離職、を1枚の図に</li>
+        <li>「忙しい → 育成に時間割けない → 新人が成長しない → 戦力化遅い → さらに忙しい」の悪循環?</li>
+        <li>福利厚生は症状対処。構造(仕事の割り振り方)を変えないと再発する</li>
+        <li>てこ(レバレッジポイント)=「最初の3ヶ月の上司面談頻度」かも</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- === COMBINE === -->
+<h2 class="section-title">実務での使い分け:両方を行き来する</h2>
+<div class="combine">
+  <h3>片方だけだと、こうなりがち</h3>
+  <p>・クリティカルだけ → 批判は鋭いが、「で、どうすれば?」の全体像が描けない。</p>
+  <p>・システムだけ → 壮大な図は描けるが、一つ一つの前提がガバガバで説得力がない。</p>
+  <h3 style="margin-top:18px;">おすすめの往復運動</h3>
+  <div class="flow">
+    <span class="chip">① 事実を<b style="color:var(--critical)">クリティカル</b>に検証</span>
+    <span class="arrow">→</span>
+    <span class="chip">② 全体を<b style="color:var(--system)">システム</b>で俯瞰</span>
+    <span class="arrow">→</span>
+    <span class="chip">③ 仮説を<b style="color:var(--critical)">クリティカル</b>に再検証</span>
+    <span class="arrow">→</span>
+    <span class="chip">④ 打ち手を<b style="color:var(--system)">システム</b>で設計</span>
+  </div>
+  <p style="margin-top:14px; color:var(--sub); font-size:13.5px;">例:就活なら「会社情報を疑う→業界×自分の構造を見る→仮説を再検証→キャリア戦略を組む」。職場なら「データを疑う→組織の因果を描く→仮説検証→打ち手設計」。</p>
+</div>
+
+<!-- === SUMMARY TABLE === -->
+<h2 class="section-title">比較早見表</h2>
+<table class="summary">
+  <thead>
+    <tr>
+      <th>観点</th>
+      <th class="c" style="color:var(--critical);">クリティカルシンキング</th>
+      <th class="s" style="color:var(--system);">システムシンキング</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><th>中心の問い</th><td>それ本当? 根拠は?</td><td>何と何がつながっている?</td></tr>
+    <tr><th>視点</th><td>ズームイン(縦)</td><td>ズームアウト(横)</td></tr>
+    <tr><th>得意</th><td>主張の精度を上げる</td><td>根本原因・全体最適を見つける</td></tr>
+    <tr><th>苦手</th><td>広い構造の把握</td><td>個別論点の厳密性</td></tr>
+    <tr><th>主なツール</th><td>前提・根拠・反証、MECE、イシューツリー</td><td>因果ループ図、ストック&フロー、レバレッジポイント</td></tr>
+    <tr><th>典型の使用場面</th><td>ニュース評価、資料レビュー、意思決定</td><td>組織課題、社会問題、プロダクト戦略</td></tr>
+    <tr><th>一言メタファー</th><td>「顕微鏡」で一点を深く見る</td><td>「地図」で全体のつながりを見る</td></tr>
+  </tbody>
+</table>
+
+<footer class="note">Thinking Framework · 思考の型を使い分けると、見える景色が変わる。</footer>
+
+</div>
+</body>
+</html>
