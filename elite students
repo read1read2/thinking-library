@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>なぜ東大・早慶生は起業せず大企業へ行くのか — 氷山モデル分析</title>
+<style>
+  :root {
+    --bg: #f7f8fb;
+    --ink: #1f2430;
+    --sub: #5b6476;
+    --line: #e3e6ef;
+    --card: #ffffff;
+    --shadow: 0 6px 24px rgba(31, 36, 48, 0.06);
+    --accent: #f59e0b;
+    --danger: #e11d48;
+
+    --L1: #60a5fa;
+    --L1-bg: #eaf3ff;
+    --L2: #3b82f6;
+    --L2-bg: #dce8ff;
+    --L3: #1d4ed8;
+    --L3-bg: #ccd9f7;
+    --L4: #1e1b4b;
+    --L4-bg: #c7c4e6;
+
+    --biz: #10a37f;
+    --biz-bg: #ecf8f3;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  header.hero { text-align: center; padding: 32px 16px 8px; }
+  header.hero .kicker {
+    display: inline-block; font-size: 12px; letter-spacing: 0.18em;
+    color: var(--sub); border: 1px solid var(--line);
+    padding: 4px 12px; border-radius: 999px; background: #fff;
+  }
+  header.hero h1 {
+    font-size: 30px; line-height: 1.45; margin: 16px 0 8px; letter-spacing: 0.01em;
+  }
+  header.hero p.lead {
+    color: var(--sub); max-width: 760px; margin: 8px auto 0; font-size: 15px;
+  }
+
+  h2.section-title {
+    font-size: 20px; margin: 56px 0 18px;
+    padding-left: 12px; border-left: 4px solid var(--accent);
+  }
+
+  /* framing */
+  .framing {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 22px 26px;
+    font-size: 15px;
+  }
+  .framing b { color: var(--L3); }
+  .framing .warn {
+    margin-top: 14px;
+    background: #fff7e6;
+    border-left: 3px solid var(--accent);
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: #6b4914;
+  }
+  .framing .challenge-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px;
+  }
+  .framing .challenge {
+    background: #fafbfe; border-radius: 10px; padding: 12px 14px;
+    border-left: 3px solid var(--L3); font-size: 14px;
+  }
+  .framing .challenge h4 { margin: 0 0 4px; font-size: 13px; color: var(--L3); }
+
+  /* iceberg */
+  .diagram-wrap {
+    background: linear-gradient(180deg, #eaf4ff 0%, #eaf4ff 38%, #bfdcff 38%, #5b92d1 100%);
+    border-radius: 16px; box-shadow: var(--shadow);
+    padding: 10px 10px 14px; overflow-x: auto;
+  }
+  .diagram-wrap svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+
+  /* layer cards */
+  .layers { display: grid; gap: 14px; }
+  .layer {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 22px 24px;
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 20px;
+    border-left: 6px solid var(--line);
+  }
+  .layer .num { font-size: 34px; font-weight: 800; line-height: 1; padding-top: 4px; letter-spacing: -0.02em; }
+  .layer .num small { display: block; font-size: 10px; letter-spacing: 0.18em; font-weight: 600; color: var(--sub); margin-top: 8px; }
+  .layer h3 { margin: 0 0 4px; font-size: 18px; }
+  .layer h3 .jp { font-size: 13px; color: var(--sub); margin-left: 8px; font-weight: 500; }
+  .layer .q {
+    background: #fafbfe; border-radius: 10px; padding: 10px 14px;
+    font-size: 14px; color: var(--sub); margin: 10px 0 12px;
+    border-left: 3px solid var(--line);
+  }
+  .layer ul { margin: 0; padding-left: 20px; }
+  .layer ul li { margin-bottom: 4px; font-size: 14.5px; }
+  .layer.l1 { border-left-color: var(--L1); } .layer.l1 .num { color: var(--L1); } .layer.l1 .q { border-left-color: var(--L1); }
+  .layer.l2 { border-left-color: var(--L2); } .layer.l2 .num { color: var(--L2); } .layer.l2 .q { border-left-color: var(--L2); }
+  .layer.l3 { border-left-color: var(--L3); } .layer.l3 .num { color: var(--L3); } .layer.l3 .q { border-left-color: var(--L3); }
+  .layer.l4 { border-left-color: var(--L4); } .layer.l4 .num { color: var(--L4); } .layer.l4 .q { border-left-color: var(--L4); }
+
+  /* loop */
+  .loop-wrap {
+    background: var(--card); border-radius: 16px;
+    box-shadow: var(--shadow); padding: 24px 16px 10px;
+    overflow-x: auto;
+  }
+  .loop-wrap svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+  .loop-caption { text-align: center; font-size: 13px; color: var(--sub); padding: 8px 16px 16px; }
+
+  /* biz */
+  .biz-grid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+  .biz {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 22px 24px;
+    border-top: 4px solid var(--biz);
+  }
+  .biz .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+  .biz h3 { margin: 0; font-size: 18px; }
+  .biz .layer-tag { font-size: 11px; letter-spacing: 0.08em; font-weight: 700; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+  .biz .one { font-size: 14px; color: var(--sub); margin: 6px 0 14px; }
+  .biz .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .biz .cell { background: #fafbfe; border-radius: 10px; padding: 12px 14px; font-size: 13.5px; }
+  .biz .cell h4 { margin: 0 0 4px; font-size: 12px; letter-spacing: 0.06em; color: var(--sub); }
+  .biz .cell ul { margin: 0; padding-left: 18px; }
+  .biz .cell li { margin-bottom: 2px; }
+
+  .tag-l2 { background: var(--L2-bg); color: var(--L2); }
+  .tag-l3 { background: var(--L3-bg); color: var(--L3); }
+  .tag-l4 { background: var(--L4-bg); color: var(--L4); }
+
+  /* summary */
+  .summary {
+    background: var(--card); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 22px 26px; font-size: 15px;
+  }
+  .summary ol { padding-left: 22px; margin: 6px 0 0; }
+  .summary ol li { margin-bottom: 6px; }
+  .summary b { color: var(--L3); }
+
+  footer.note {
+    text-align: center; font-size: 12px; color: var(--sub); margin-top: 40px;
+  }
+
+  @media (max-width: 720px) {
+    header.hero h1 { font-size: 22px; }
+    .layer { grid-template-columns: 1fr; }
+    .biz .grid2, .framing .challenge-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <span class="kicker">CAREER CHOICE · SYSTEMS ANALYSIS</span>
+  <h1>なぜ東大・早慶生は“起業できる力”がありながら<br />一旦、大企業へ行くのか?</h1>
+  <p class="lead">これは“勇気がない”“意識が低い”という個人の問題ではない。<br /><b>構造的に大企業を選ばされるよう設計された就活システム</b>の帰結である、と読み解けます。</p>
+</header>
+
+<!-- FRAMING -->
+<h2 class="section-title">前提:問いをクリティカルに解きほぐす</h2>
+<div class="framing">
+  この問いは一見シンプルですが、中に<b>3つの暗黙の前提</b>が潜んでいます。分析の前に、まず洗い出します。
+  <div class="challenge-grid">
+    <div class="challenge">
+      <h4>暗黙の前提①:東大・早慶生は“起業できる力”を持つ</h4>
+      学力・地頭と起業成功率の相関は実証的に小さい。学歴は<b>情報処理能力</b>の証明であり、<b>不確実性下の意思決定・営業・資金調達</b>の能力とは別物。
+    </div>
+    <div class="challenge">
+      <h4>暗黙の前提②:起業=大企業就職より正しい/優れた選択</h4>
+      起業は平均的には<b>金銭的リターンが負</b>の賭け(失敗率7〜9割)。一旦大企業、は多くの場合<b>合理的な期待値計算</b>の結果でもある。
+    </div>
+    <div class="challenge">
+      <h4>暗黙の前提③:「一旦」大企業に行けば、後から起業できる</h4>
+      実際には30代になるほど機会費用・ライフコスト(住宅・家族)が上がり、起業への出口は<b>統計的に</b>細くなる。経路依存性が強い。
+    </div>
+    <div class="challenge">
+      <h4>だからこそ、問いを書き換える</h4>
+      「なぜ起業しないのか?」ではなく、<b>「起業と大企業が公平に比較できない仕組みは何か?」</b>と問い直すと、構造が見えてくる。
+    </div>
+  </div>
+  <div class="warn">
+    ※ 本分析は「大企業に行くことは間違い」と主張するものではありません。個人にとっての最適解は人それぞれ。ここで扱うのは<b>集団として起業を選びにくくする構造</b>です。
+  </div>
+</div>
+
+<!-- ICEBERG DIAGRAM -->
+<h2 class="section-title">氷山モデル:就活の水面下で何が起きているか</h2>
+<div class="diagram-wrap">
+<svg viewBox="0 0 960 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Iceberg applied to elite student career choice.">
+  <defs>
+    <linearGradient id="ice-top" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eaf4ff"/>
+    </linearGradient>
+    <linearGradient id="ice-bottom" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#cfe2f9"/>
+      <stop offset="0.5" stop-color="#6fa8d6"/>
+      <stop offset="1" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4faff"/><stop offset="1" stop-color="#dbecff"/>
+    </linearGradient>
+    <marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="9" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L5,10 L10,0 Z" fill="#1f2430"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="960" height="210" fill="url(#sky)"/>
+  <rect x="0" y="210" width="960" height="350" fill="#bfdcff"/>
+  <line x1="0" y1="210" x2="960" y2="210" stroke="#1f6feb" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="20" y="204" font-size="11" fill="#1f6feb" font-weight="700" letter-spacing="0.08em">SEA LEVEL ─── 表層に見えるもの</text>
+
+  <polygon points="440,90 520,90 560,210 400,210" fill="url(#ice-top)" stroke="#9ac3ea" stroke-width="1"/>
+  <polygon points="400,210 560,210 640,330 660,440 540,530 400,530 280,440 310,330"
+           fill="url(#ice-bottom)" stroke="#6b8fcf" stroke-width="1"/>
+
+  <text x="480" y="138" text-anchor="middle" font-size="14" font-weight="800" fill="#1f2430">出来事</text>
+  <text x="480" y="158" text-anchor="middle" font-size="10.5" fill="#5b6476" letter-spacing="0.08em">EVENTS</text>
+  <text x="480" y="180" text-anchor="middle" font-size="10.5" fill="#5b6476">「商社/外コン/メガバン内定」</text>
+
+  <text x="480" y="264" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">パターン</text>
+  <text x="480" y="282" text-anchor="middle" font-size="10.5" fill="#eaf4ff" letter-spacing="0.08em">PATTERNS</text>
+  <text x="480" y="302" text-anchor="middle" font-size="10.5" fill="#eaf4ff">上位校ほど大企業偏重が強化</text>
+
+  <text x="480" y="368" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">構造</text>
+  <text x="480" y="386" text-anchor="middle" font-size="10.5" fill="#dbe7ff" letter-spacing="0.08em">STRUCTURE</text>
+  <text x="480" y="406" text-anchor="middle" font-size="10.5" fill="#dbe7ff">新卒一括採用 / 情報非対称 / 親期待</text>
+
+  <text x="480" y="466" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">メンタルモデル</text>
+  <text x="480" y="484" text-anchor="middle" font-size="10.5" fill="#c9d6f0" letter-spacing="0.08em">MENTAL MODELS</text>
+  <text x="480" y="504" text-anchor="middle" font-size="10.5" fill="#c9d6f0">「学歴に見合ったキャリア」を歩むべき</text>
+
+  <g font-family="inherit">
+    <rect x="700" y="105" width="240" height="58" rx="10" fill="#ffffff" stroke="#e3e6ef"/>
+    <text x="715" y="128" font-size="12" font-weight="700" fill="#60a5fa">反応のレベル</text>
+    <text x="715" y="148" font-size="11.5" fill="#5b6476">例:起業イベントを増やす</text>
+
+    <rect x="700" y="240" width="240" height="58" rx="10" fill="#ffffff" stroke="#e3e6ef"/>
+    <text x="715" y="263" font-size="12" font-weight="700" fill="#3b82f6">適応のレベル</text>
+    <text x="715" y="283" font-size="11.5" fill="#5b6476">例:VC×大学の早期接続</text>
+
+    <rect x="700" y="350" width="240" height="58" rx="10" fill="#ffffff" stroke="#e3e6ef"/>
+    <text x="715" y="373" font-size="12" font-weight="700" fill="#1d4ed8">設計のレベル</text>
+    <text x="715" y="393" font-size="11.5" fill="#5b6476">例:新卒カード2回制、ギャップイヤー</text>
+
+    <rect x="700" y="460" width="240" height="58" rx="10" fill="#ffffff" stroke="#e3e6ef"/>
+    <text x="715" y="483" font-size="12" font-weight="700" fill="#1e1b4b">変容のレベル</text>
+    <text x="715" y="503" font-size="11.5" fill="#5b6476">例:「失敗=傷」神話の書き換え</text>
+  </g>
+
+  <g font-family="inherit">
+    <line x1="140" y1="120" x2="140" y2="500" stroke="#1f2430" stroke-width="2" marker-end="url(#arrow-down)"/>
+    <text x="130" y="115" font-size="12" font-weight="700" fill="#1f2430" text-anchor="end">浅い</text>
+    <text x="160" y="115" font-size="12" fill="#5b6476">表層介入・効き:小</text>
+    <text x="130" y="520" font-size="12" font-weight="700" fill="#1f2430" text-anchor="end">深い</text>
+    <text x="160" y="520" font-size="12" fill="#5b6476">構造変革・効き:大</text>
+  </g>
+</svg>
+</div>
+
+<!-- LAYER CARDS -->
+<h2 class="section-title">各層をくわしく</h2>
+<div class="layers">
+
+  <div class="layer l1">
+    <div class="num">01<small>EVENTS</small></div>
+    <div>
+      <h3>出来事<span class="jp">目に見える選択の瞬間</span></h3>
+      <div class="q">問い:「今、何が起きている?」</div>
+      <ul>
+        <li>東大生の就職先ランキング上位を外資コンサル・商社・メガバンクが占める</li>
+        <li>慶應・早稲田の起業サークル出身者でも、最終的には大企業内定を受諾</li>
+        <li>ピッチイベントで熱く語っていた学生が、4年春には就活スーツで説明会へ</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="layer l2">
+    <div class="num">02<small>PATTERNS</small></div>
+    <div>
+      <h3>パターン・傾向<span class="jp">繰り返される条件</span></h3>
+      <div class="q">問い:「どんな時・人・環境で繰り返される?」</div>
+      <ul>
+        <li><b>上位校ほど起業率が低下</b>(所得・安定の機会費用が高いほど、ハイリスク選択を避ける逆説)</li>
+        <li><b>夏インターン期(3年夏)</b>で大半のルートが事実上固定化</li>
+        <li><b>親が大企業勤務や士業</b>の家庭で、起業選択率がさらに低い</li>
+        <li>留学・地方出身・学費自弁など<b>独立変数の多い学生</b>ほど、逆に起業に寄る傾向</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="layer l3">
+    <div class="num">03<small>STRUCTURE</small></div>
+    <div>
+      <h3>構造<span class="jp">ルール・仕組み・関係性</span></h3>
+      <div class="q">問い:「この選択を自然にする仕組みは何か?」</div>
+      <ul>
+        <li><b>新卒一括採用&既卒ペナルティ</b>:「新卒カード」を一度使わないと、大企業への入口が急に狭まる(事実上の片道切符)</li>
+        <li><b>情報の非対称</b>:大学キャリアセンター・OB/OG訪問・就活サイトはすべて大企業ルート中心。起業の学習コストが圧倒的に高い</li>
+        <li><b>学費と奨学金返済</b>:学費400万円+奨学金数百万円を抱え、返済は雇用所得ベース設計。無収入期間を許容しにくい</li>
+        <li><b>親の期待構造</b>:教育に投じた年数百万円は「回収されるべき投資」として無意識に機能。大企業内定が心理的リターン</li>
+        <li><b>社会保険・住宅ローン・結婚市場</b>が会社員前提で設計されている(与信・年金・保育園加点)</li>
+        <li><b>学生起業エコシステムの薄さ</b>:学生向けVC・シードアクセラレーターの絶対数が米中の数十分の一</li>
+        <li><b>大学側のKPI</b>:就職率・就職先ブランドで評価されるため、大学自身が大企業ルートを強化する</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="layer l4">
+    <div class="num">04<small>MENTAL MODELS</small></div>
+    <div>
+      <h3>メンタルモデル<span class="jp">思い込み・文化的前提</span></h3>
+      <div class="q">問い:「当たり前」として疑われていない前提は?</div>
+      <ul>
+        <li><b>「学歴に見合ったキャリアを歩むべき」</b>:コストをかけた教育はブランド企業で回収するもの</li>
+        <li><b>「失敗=人生の傷」</b>:再挑戦できる前提が社会に共有されていない(欧米とのギャップ)</li>
+        <li><b>「一旦大企業でスキルをつけてから」</b>:“一旦”の先に起業はほぼ来ない、と知りながら信じる自己暗示</li>
+        <li><b>「起業は一部の天才がやるもの」</b>:学業成績の良さと起業成功率は相関しないのに、逆に萎縮する</li>
+        <li><b>「エリートコースを外れたら戻れない」</b>:実際には外資・コンサル経由で戻れるルートは残っているが、学生には見えない</li>
+        <li><b>「安定=幸福、挑戦=孤独」</b>:戦後の大企業神話が親世代を通じて下りてくる</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- CAUSAL LOOPS -->
+<h2 class="section-title">システム思考:起業を遠ざける“4つのループ”</h2>
+<div class="loop-wrap">
+<svg viewBox="0 0 960 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Causal loop diagram">
+  <defs>
+    <marker id="cl-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#1f2430"/>
+    </marker>
+  </defs>
+
+  <!-- Loop 1: Peer conformity -->
+  <g>
+    <text x="140" y="30" font-size="13" font-weight="700" fill="#1d4ed8">Loop 1｜同調圧力ループ</text>
+    <circle cx="110" cy="90" r="42" fill="#ccd9f7" stroke="#1d4ed8" stroke-width="1.5"/>
+    <text x="110" y="88" text-anchor="middle" font-size="11.5" font-weight="700">周囲が</text>
+    <text x="110" y="103" text-anchor="middle" font-size="11">就活開始</text>
+
+    <circle cx="260" cy="90" r="42" fill="#ccd9f7" stroke="#1d4ed8" stroke-width="1.5"/>
+    <text x="260" y="88" text-anchor="middle" font-size="11.5" font-weight="700">自分もES</text>
+    <text x="260" y="103" text-anchor="middle" font-size="11">/面接へ</text>
+
+    <circle cx="300" cy="210" r="42" fill="#ccd9f7" stroke="#1d4ed8" stroke-width="1.5"/>
+    <text x="300" y="208" text-anchor="middle" font-size="11.5" font-weight="700">内定獲得</text>
+    <text x="300" y="223" text-anchor="middle" font-size="11">安心感↑</text>
+
+    <circle cx="140" cy="230" r="42" fill="#ccd9f7" stroke="#1d4ed8" stroke-width="1.5"/>
+    <text x="140" y="228" text-anchor="middle" font-size="11.5" font-weight="700">起業準備の</text>
+    <text x="140" y="243" text-anchor="middle" font-size="11">時間消失</text>
+
+    <path d="M 152 90 Q 200 70 218 90" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 280 130 Q 300 170 298 170" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 260 220 Q 220 230 184 230" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 118 190 Q 95 150 98 130" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <text x="210" y="160" font-size="11" fill="#1d4ed8" font-weight="700">R(強化)</text>
+  </g>
+
+  <!-- Loop 2: Parental investment recovery -->
+  <g>
+    <text x="510" y="30" font-size="13" font-weight="700" fill="#b45309">Loop 2｜親の投資回収ループ</text>
+    <circle cx="490" cy="90" r="42" fill="#fff0cf" stroke="#b45309" stroke-width="1.5"/>
+    <text x="490" y="88" text-anchor="middle" font-size="11.5" font-weight="700">塾・学費</text>
+    <text x="490" y="103" text-anchor="middle" font-size="11">に多額投資</text>
+
+    <circle cx="640" cy="90" r="42" fill="#fff0cf" stroke="#b45309" stroke-width="1.5"/>
+    <text x="640" y="88" text-anchor="middle" font-size="11.5" font-weight="700">親の期待値</text>
+    <text x="640" y="103" text-anchor="middle" font-size="11">&amp;世間体↑</text>
+
+    <circle cx="720" cy="210" r="42" fill="#fff0cf" stroke="#b45309" stroke-width="1.5"/>
+    <text x="720" y="208" text-anchor="middle" font-size="11.5" font-weight="700">大企業内定</text>
+    <text x="720" y="223" text-anchor="middle" font-size="11">を報告</text>
+
+    <circle cx="530" cy="230" r="42" fill="#fff0cf" stroke="#b45309" stroke-width="1.5"/>
+    <text x="530" y="228" text-anchor="middle" font-size="11.5" font-weight="700">親が安心</text>
+    <text x="530" y="243" text-anchor="middle" font-size="11">親孝行感情</text>
+
+    <path d="M 532 90 Q 570 70 598 90" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 660 130 Q 700 170 720 168" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 678 225 Q 620 240 572 232" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 500 192 Q 470 150 475 130" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <text x="610" y="160" font-size="11" fill="#b45309" font-weight="700">R(強化)</text>
+  </g>
+
+  <!-- Loop 3: Path dependency / Golden handcuffs -->
+  <g>
+    <text x="140" y="340" font-size="13" font-weight="700" fill="#10a37f">Loop 3｜ゴールデン・ハンドカフ(経路依存)ループ</text>
+    <circle cx="110" cy="410" r="42" fill="#ecf8f3" stroke="#10a37f" stroke-width="1.5"/>
+    <text x="110" y="408" text-anchor="middle" font-size="11.5" font-weight="700">高年収で</text>
+    <text x="110" y="423" text-anchor="middle" font-size="11">入社</text>
+
+    <circle cx="260" cy="410" r="42" fill="#ecf8f3" stroke="#10a37f" stroke-width="1.5"/>
+    <text x="260" y="408" text-anchor="middle" font-size="11.5" font-weight="700">生活水準</text>
+    <text x="260" y="423" text-anchor="middle" font-size="11">が上昇</text>
+
+    <circle cx="410" cy="410" r="42" fill="#ecf8f3" stroke="#10a37f" stroke-width="1.5"/>
+    <text x="410" y="408" text-anchor="middle" font-size="11.5" font-weight="700">家・結婚</text>
+    <text x="410" y="423" text-anchor="middle" font-size="11">ローン固定</text>
+
+    <circle cx="560" cy="410" r="42" fill="#ecf8f3" stroke="#10a37f" stroke-width="1.5"/>
+    <text x="560" y="408" text-anchor="middle" font-size="11.5" font-weight="700">機会費用</text>
+    <text x="560" y="423" text-anchor="middle" font-size="11">が上昇</text>
+
+    <circle cx="710" cy="410" r="42" fill="#ecf8f3" stroke="#10a37f" stroke-width="1.5"/>
+    <text x="710" y="408" text-anchor="middle" font-size="11.5" font-weight="700">起業を</text>
+    <text x="710" y="423" text-anchor="middle" font-size="11">先送り</text>
+
+    <path d="M 152 410 Q 200 410 218 410" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 302 410 Q 350 410 368 410" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 452 410 Q 500 410 518 410" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 602 410 Q 650 410 668 410" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 710 452 Q 650 510 400 510 Q 150 510 108 452" fill="none" stroke="#1f2430" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#cl-arrow)"/>
+    <text x="400" y="538" font-size="11" fill="#10a37f" font-weight="700" text-anchor="middle">R:「一旦大企業」の“一旦”が永続化する</text>
+  </g>
+
+  <!-- Loop 4: Info asymmetry -->
+  <g>
+    <text x="810" y="340" font-size="13" font-weight="700" fill="#7c3aed" text-anchor="middle">Loop 4｜情報非対称ループ</text>
+    <circle cx="810" cy="400" r="40" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+    <text x="810" y="398" text-anchor="middle" font-size="11" font-weight="700">大企業情報</text>
+    <text x="810" y="413" text-anchor="middle" font-size="10.5">が豊富</text>
+
+    <circle cx="810" cy="490" r="36" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+    <text x="810" y="488" text-anchor="middle" font-size="11" font-weight="700">起業情報</text>
+    <text x="810" y="502" text-anchor="middle" font-size="10.5">の学習↓</text>
+
+    <path d="M 810 442 Q 810 455 810 456" fill="none" stroke="#1f2430" stroke-width="1.6" marker-end="url(#cl-arrow)"/>
+    <path d="M 848 490 Q 880 445 848 395" fill="none" stroke="#1f2430" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#cl-arrow)"/>
+  </g>
+
+</svg>
+</div>
+<p class="loop-caption">4つの強化ループが同時に回ることで、<b>個人の意思とは独立に</b>「大企業ルート」が選ばれやすくなる。</p>
+
+<!-- BUSINESS -->
+<h2 class="section-title">“差し込める”ビジネス&制度モデル</h2>
+<div class="framing" style="margin-bottom: 18px;">
+  L1〜L2は一過性のイベント(起業サークル、ピッチ大会)で既に手が入っていますが、
+  本当に効くのは<b>L3(構造)</b>の書き換え。ここにビジネスとしても制度としても大きな余地があります。
+</div>
+
+<div class="biz-grid">
+
+  <div class="biz">
+    <div class="head">
+      <h3>① 学生起業家向け「セーフティネット新卒パス」</h3>
+      <span class="layer-tag tag-l3">L3 構造介入</span>
+    </div>
+    <div class="one">起業で失敗しても<b>2〜3年後に新卒カードを再行使できる保険的枠組み</b>。合否の機会費用を非対称化する。</div>
+    <div class="grid2">
+      <div class="cell"><h4>PROBLEM</h4>
+        <ul><li>起業失敗=再就職で不利、という片道リスク</li><li>リスク非対称のせいで“挑戦しない方が合理的”になる</li></ul>
+      </div>
+      <div class="cell"><h4>SOLUTION</h4>
+        <ul><li>大企業連合×政府の「挑戦ブランク保険」制度</li><li>再就職枠を新卒相当で予約</li><li>起業経験を人事評価でプラス換算</li></ul>
+      </div>
+      <div class="cell"><h4>REVENUE</h4>
+        <ul><li>大企業からの会費(採用コストの代替)</li><li>政府・自治体からの補助金</li></ul>
+      </div>
+      <div class="cell"><h4>MOAT</h4>
+        <ul><li>参加大企業のネットワーク規模</li><li>挑戦データベースがリクルーター側の価値に</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="biz">
+    <div class="head">
+      <h3>② 大学×VC「学生ギャップイヤー・アクセラレーター」</h3>
+      <span class="layer-tag tag-l3">L3</span>
+    </div>
+    <div class="one">卒業前後の1〜2年、生活費+メンター+シード資金が出る<b>構造化された“猶予期間”</b>。</div>
+    <div class="grid2">
+      <div class="cell"><h4>PROBLEM</h4>
+        <ul><li>無収入期間のリスクが起業の最大ブロッカー</li><li>学生は資金・経験・ネットワーク3つとも不足</li></ul>
+      </div>
+      <div class="cell"><h4>SOLUTION</h4>
+        <ul><li>月20万円×12〜24ヶ月の生活費保証</li><li>1年後に「就職/起業継続」を再選択可能</li><li>大学単位やクレジットと接続</li></ul>
+      </div>
+      <div class="cell"><h4>REVENUE</h4>
+        <ul><li>成功企業のエクイティ(VCモデル)</li><li>大学・政府・企業スポンサー</li></ul>
+      </div>
+      <div class="cell"><h4>MOAT</h4>
+        <ul><li>大学との公式連携(単位化)</li><li>卒業生ネットワーク</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="biz">
+    <div class="head">
+      <h3>③ 親世代向け「起業を理解する」リテラシー・メディア</h3>
+      <span class="layer-tag tag-l4">L4 メンタルモデル介入</span>
+    </div>
+    <div class="one">最大の非ステークホルダーは実は<b>親</b>。本人ではなく“親を動かす”メディアとコミュニティ。</div>
+    <div class="grid2">
+      <div class="cell"><h4>PROBLEM</h4>
+        <ul><li>親の「大企業=安心」という前提が最後の防波堤になる</li><li>情報源が古く(新聞・TV)、更新されない</li></ul>
+      </div>
+      <div class="cell"><h4>SOLUTION</h4>
+        <ul><li>親世代向けの起業・新卒キャリア解説メディア</li><li>「親向け1day説明会」やオンライン相談</li><li>成功/失敗OBの保護者インタビュー</li></ul>
+      </div>
+      <div class="cell"><h4>REVENUE</h4>
+        <ul><li>教育系・保険系との広告提携</li><li>大学広報とのタイアップ</li></ul>
+      </div>
+      <div class="cell"><h4>MOAT</h4>
+        <ul><li>親コミュニティの蓄積</li><li>世代横断の信頼メディア</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="biz">
+    <div class="head">
+      <h3>④ 大企業の「出向起業」「社内独立」オフィシャル制度</h3>
+      <span class="layer-tag tag-l3">L3 企業向け</span>
+    </div>
+    <div class="one">“一旦大企業”の中で起業できる公式ルートを設計し、エリート人材の流出ではなく<b>還流</b>に変える。</div>
+    <div class="grid2">
+      <div class="cell"><h4>PROBLEM</h4>
+        <ul><li>大企業は挑戦人材を活かせず転職で失う</li><li>学生は「大企業=停滞」とのイメージで敬遠</li></ul>
+      </div>
+      <div class="cell"><h4>SOLUTION</h4>
+        <ul><li>入社3年以内に起業提案 → 本体が出資+出向扱い</li><li>失敗時は復帰保証(時限リスクヘッジ)</li><li>経産省の出向起業補助制度との連携</li></ul>
+      </div>
+      <div class="cell"><h4>REVENUE</h4>
+        <ul><li>コンサル・設計フィー</li><li>パートナー大企業の採用ブランディング向上</li></ul>
+      </div>
+      <div class="cell"><h4>MOAT</h4>
+        <ul><li>制度設計ノウハウ</li><li>政府スキームへの接続</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="biz">
+    <div class="head">
+      <h3>⑤ 高校生向け「キャリアの複線」教育プログラム</h3>
+      <span class="layer-tag tag-l4">L4 早期介入</span>
+    </div>
+    <div class="one">就活期には遅い。<b>中高生の時点で</b>「起業・研究・大企業・公務員・独立」を横並びで見せる教材とワーク。</div>
+    <div class="grid2">
+      <div class="cell"><h4>PROBLEM</h4>
+        <ul><li>高校までの進路指導は“大学受験”単線</li><li>大学入学時点で視野が既に狭い</li></ul>
+      </div>
+      <div class="cell"><h4>SOLUTION</h4>
+        <ul><li>進路オプションの比較ワークブック</li><li>年代別ロールモデル(30歳で起業した人など)</li><li>高校の探究学習カリキュラムと統合</li></ul>
+      </div>
+      <div class="cell"><h4>REVENUE</h4>
+        <ul><li>教育委員会・私立校への導入</li><li>保護者向けプレミアムコンテンツ</li></ul>
+      </div>
+      <div class="cell"><h4>MOAT</h4>
+        <ul><li>教育機関との長期契約</li><li>卒業生の実績データ</li></ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SUMMARY -->
+<h2 class="section-title">まとめ:1枚で答える</h2>
+<div class="summary">
+  <ol>
+    <li>問いの暗黙前提(能力ある/起業=正/一旦=戻れる)を疑うと、<b>「起業が選ばれにくい構造」の問い</b>になる。</li>
+    <li>表層は「大企業内定」という個人選択だが、水面下には<b>新卒一括採用・情報非対称・親期待・経路依存</b>の4構造がある。</li>
+    <li>それらが<b>同調圧力/親投資回収/ゴールデン・ハンドカフ/情報非対称</b>の4つの強化ループを回し、個人の意思と独立に大企業へ流す。</li>
+    <li>最大のレバレッジは<b>L3(構造)</b>。セーフティネット新卒パス、ギャップイヤー、出向起業、親リテラシー、高校早期介入に事業&制度の余地がある。</li>
+    <li>個人へのアドバイスは1つ:<b>「一旦」の先に起業は来ない前提で、“一旦”を意図的に短く区切る</b>(例:3年で辞める約束、家は買わない、など)。</li>
+  </ol>
+</div>
+
+<footer class="note">Elite Career Paradox · 個人の意志より、構造が選択を決めていることがある。</footer>
+
+</div>
+</body>
+</html>
